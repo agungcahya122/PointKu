@@ -46,7 +46,7 @@ Berikut cara untuk menjalankan program pada git local.
 cloning repo dengan cara
 
 ```sh
-git clone git@github.com:trimovie-project/threeMovie-frontend.git
+git clone git@github.com:agungcahya122/PointKu.git
 ```
 
 Install semua package.json
