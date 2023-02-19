@@ -6,9 +6,14 @@ module.exports = {
       colors: {
         background: "#F8F8F8",
         color1: "#FFFFFF",
-        color2: "#F46801",
+        orangeComponent: "#F46801",
         color3: "#222222",
         color4: "#9F9F9F",
+        BgSidebar: "#FBFBFB",
+      },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
       },
     },
   },
