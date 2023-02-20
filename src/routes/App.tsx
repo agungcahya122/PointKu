@@ -1,7 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Register from "../pages/Auth/Register";
@@ -11,6 +8,7 @@ import ListProduct from "../pages/ListProduct";
 import AddProduct from "../pages/AddProduct";
 import EditProduct from "../pages/EditProduct";
 import Profile from "../pages/Profile";
+import ListMember from "../pages/ListMember";
 
 function App() {
   const router = createBrowserRouter([
@@ -41,6 +39,10 @@ function App() {
     {
       path: "/profile",
       element: <Profile />,
+    },
+    {
+      path: "/listMember",
+      element: <ListMember />,
     },
   ]);
 
