@@ -17,7 +17,6 @@ export default function SideNav() {
   return (
     <>
       <div className="min-h-screen w-[20rem] bg-BgSidebar shadow-xl  md:flex lg:flex">
-
         <div className="flex flex-col ">
           <div className="flex flex-row justify-center mt-10">
             <img src={salesLogo} className="w-2/12 mt-5" />

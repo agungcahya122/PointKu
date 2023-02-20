@@ -10,11 +10,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
 }
 
-export function CustomInput({
-  id,
-  placeholder,
-  ...props
-}: Props) {
+export function CustomInput({ id, placeholder, ...props }: Props) {
   return (
     <input
       id={id}
@@ -38,14 +34,11 @@ export function InputIcon({ id, placeholder, ...props }: Props) {
   );
 }
 
-interface TextAreaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   placeholder?: string;
   value?: string;
-  onChange?: (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => void;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export const TextArea: FC<TextAreaProps> = ({
