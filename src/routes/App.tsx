@@ -9,6 +9,7 @@ import AddProduct from "../pages/AddProduct";
 import EditProduct from "../pages/EditProduct";
 import Profile from "../pages/Profile";
 import ListMember from "../pages/ListMember";
+import Report from "../pages/Report";
 
 function App() {
   const router = createBrowserRouter([
@@ -43,6 +44,10 @@ function App() {
     {
       path: "/listMember",
       element: <ListMember />,
+    },
+    {
+      path: "/report",
+      element: <Report />,
     },
   ]);
 
