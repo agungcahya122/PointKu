@@ -11,10 +11,6 @@ import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { FaArrowCircleLeft } from "react-icons/fa";
 
-import { FaArrowCircleLeft, FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { CustomInput } from "../components/CustomInput";
-import CustomButton from "../components/CustomButton";
 const ListMember = () => {
   const navigate = useNavigate();
 
