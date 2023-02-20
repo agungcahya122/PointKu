@@ -1,11 +1,12 @@
 import Card from "../components/Card";
-import { Button } from "../components/InputGroup";
+
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 import { FaShoppingCart } from "react-icons/fa";
 import { useState } from "react";
 
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
+import CustomButton from "../components/CustomButton";
 
 const Home = () => {
   return (
@@ -89,7 +90,7 @@ const Content = () => {
             </div>
           </div>
         </div>
-        <Button
+        <CustomButton
           id="btn-loadMore"
           label="Lihat Lebih Banyak"
           onClick={{}}
@@ -156,7 +157,7 @@ const Keranjang = () => {
           </select>
         </div>
         <div className="mx-auto mt-10">
-          <Button
+          <CustomButton
             id="btn-continuePayment"
             label="Lanjutkan Pembayaran"
             onClick={{}}
@@ -191,7 +192,7 @@ const CardKeranjang = () => {
           <div className="flex flex-row justify-between">
             <h2 className="text-xl text-black mt-2 ml-3">$20</h2>
             <div className="flex flex-row mr-2">
-              <Button
+              <CustomButton
                 id="btn-add"
                 label="+"
                 onClick={addProduct}
@@ -199,7 +200,7 @@ const CardKeranjang = () => {
               />
               <p className="ml-3 text-xl text-black mt-1">{count}</p>
               {count === 1 ? (
-                <Button
+                <CustomButton
                   id="btn-add"
                   label="-"
                   onClick={decProduct}
@@ -207,7 +208,7 @@ const CardKeranjang = () => {
                   disabled
                 />
               ) : (
-                <Button
+                <CustomButton
                   id="btn-add"
                   label="-"
                   onClick={decProduct}

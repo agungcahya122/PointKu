@@ -1,6 +1,6 @@
 import React from "react";
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
-import { Button } from "./InputGroup";
+import CustomButton from "./CustomButton";
 
 export default function Card() {
   return (
@@ -17,7 +17,7 @@ export default function Card() {
             $20
           </h2>
           <div className="card-actions">
-            <Button
+            <CustomButton
               id="btn-card"
               label="Tambah ke Keranjang"
               onClick={{}}

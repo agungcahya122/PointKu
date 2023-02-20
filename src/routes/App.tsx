@@ -5,6 +5,7 @@ import Register from "../pages/Auth/Register";
 import Login from "../pages/Auth/Login";
 import Home from "../pages/Home";
 import ListProduct from "../pages/ListProduct";
+import { Profile, EditProfile } from "../pages/Profile";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,6 +24,14 @@ function App() {
     {
       path: "/listProduct",
       element: <ListProduct />,
+    },
+    {
+      path: "/profile",
+      element: <Profile />,
+    },
+    {
+      path: "/editProfile",
+      element: <EditProfile />,
     },
   ]);
 
