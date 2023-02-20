@@ -61,6 +61,7 @@ export default function SideNav() {
                 label="Laporan"
                 className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
+
             </li>
             <li className="mt-4 ml-5">
               <CustomButton
