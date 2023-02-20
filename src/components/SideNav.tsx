@@ -1,4 +1,6 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import {
   FaHome,
   FaBoxOpen,
@@ -10,9 +12,11 @@ import salesLogo from "../assets/sales.webp";
 import avatarIcon from "../assets/avatarIcon.webp";
 
 export default function SideNav() {
+  const navigate = useNavigate();
+
   return (
     <>
-      <div>
+      <div className="sticky top-0 right-0">
         <div className="lg:hidden drawer">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
@@ -39,9 +43,12 @@ export default function SideNav() {
                   </li>
                   <li className="flex flex-row hover:bg-orangeComponent w-[70%] hover:py-2 rounded-xl items-center p-3 hover:cursor-pointer text-orangeComponent">
                     <FaBoxOpen className="w-[1.8rem] h-[1.8rem]" />
-                    <a className="text-2xl  text-orangeComponent font-poppins font-semibold ml-5 hover:text-white">
+                    <Link
+                      to={"/listProduct"}
+                      className="text-2xl  text-orangeComponent font-poppins font-semibold ml-5 hover:text-white"
+                    >
                       Produk
-                    </a>
+                    </Link>
                   </li>
                   <li className="flex flex-row hover:bg-orangeComponent w-[70%] hover:py-2 rounded-xl items-center p-3 hover:cursor-pointer text-orangeComponent">
                     <FaPeopleArrows className="w-[1.8rem] h-[1.8rem]" />
@@ -49,7 +56,7 @@ export default function SideNav() {
                       Member
                     </a>
                   </li>
-                  <li className="flex flex-row hover:bg-orangeComponent w-[70%] hover:py-2 rounded-xl items-center p-3 hover:cursor-pointer text-orangeComponent">
+                  <li className="flex flex-row hover:bg-orangeComponent w-[70%] hover:py-2 rounded-xl items-center p-3 hover:cursor-pointer text-orangeComponent ">
                     <FaBookReader className="w-[1.8rem] h-[1.8rem]" />
                     <a className="text-2xl  text-orangeComponent font-poppins font-semibold ml-5 hover:text-white">
                       Laporan
@@ -84,6 +91,7 @@ export default function SideNav() {
           </div>
         </div>
       </div>
+
       <div className="min-h-screen w-[20rem] bg-BgSidebar shadow-xl hidden md:flex lg:flex">
         <div className="flex flex-col ">
           <div className="flex flex-row justify-center mt-10">
