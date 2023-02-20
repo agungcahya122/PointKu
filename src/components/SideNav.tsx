@@ -43,7 +43,7 @@ export default function SideNav() {
                 <p className="ml-4">Member</p>
               </button>
             </li>
-            <li className="mt-4 ml-5">
+            <li className="mt-4 ml-5" onClick={() => navigate("/report")}>
               <button className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl">
                 <FaBookReader className="w-[1.8rem] h-[1.8rem]" />
                 <p className="ml-4">Laporan</p>
