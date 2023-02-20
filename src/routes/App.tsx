@@ -1,4 +1,7 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Register from "../pages/Auth/Register";
@@ -10,8 +13,13 @@ import { Profile, EditProfile } from "../pages/Profile";
 
 import AddProduct from "../pages/AddProduct";
 import EditProduct from "../pages/EditProduct";
-import { AddMember, EditMember, ListMember } from "../pages/ListMember";
+import {
+  AddMember,
+  EditMember,
+  ListMember,
+} from "../pages/ListMember";
 import Report from "../pages/Report";
+import DetailTransaksi from "../pages/DetailTransaksi";
 
 function App() {
   const router = createBrowserRouter([
@@ -62,6 +70,10 @@ function App() {
     {
       path: "/editMember",
       element: <EditMember />,
+    },
+    {
+      path: "/detail-transaksi",
+      element: <DetailTransaksi />,
     },
   ]);
 
