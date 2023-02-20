@@ -1,7 +1,6 @@
 import { FC, ButtonHTMLAttributes } from "react";
 
-interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   id?: string;
   label?: string;
   icon?: JSX.Element;
@@ -19,9 +18,7 @@ const CustomButton: FC<ButtonProps> = ({
   return (
     <button
       id={id}
-      className={`${
-        loading && "bg-gray-700 cursor-not-allowed"
-      }`}
+      className={`${loading && "bg-gray-700 cursor-not-allowed"}`}
       disabled={loading}
       onClick={onClick}
       {...props}
