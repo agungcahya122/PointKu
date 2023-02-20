@@ -5,11 +5,15 @@ import Register from "../pages/Auth/Register";
 import Login from "../pages/Auth/Login";
 import Home from "../pages/Home";
 import ListProduct from "../pages/ListProduct";
+
+import { Profile, EditProfile } from "../pages/Profile";
+
 import AddProduct from "../pages/AddProduct";
 import EditProduct from "../pages/EditProduct";
 import Profile from "../pages/Profile";
 import ListMember from "../pages/ListMember";
 import Report from "../pages/Report";
+
 
 function App() {
   const router = createBrowserRouter([
@@ -42,6 +46,8 @@ function App() {
       element: <Profile />,
     },
     {
+      path: "/editProfile",
+      element: <EditProfile />,
       path: "/listMember",
       element: <ListMember />,
     },
