@@ -4,7 +4,7 @@ import { IoCallOutline } from "react-icons/io5";
 
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
-import avatar from "../assets/avataricon.webp";
+import avatarIcon from "../assets/avatarIcon.webp";
 import CustomButton from "../components/CustomButton";
 
 function Profile() {
@@ -24,7 +24,11 @@ function Profile() {
             </div>
           </div>
           <div className="tracking-[0.2rem] font-bold flex flex-col items-center text-center">
-            <img src={avatar} alt="avatar" className="w-40" />
+            <img
+              src={avatarIcon}
+              alt="avatar"
+              className="w-1/6"
+            />
             <br />
             <h1 className="text-color3 text-2xl">Warung saya</h1>
             <br />
