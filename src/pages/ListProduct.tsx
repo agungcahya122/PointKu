@@ -1,4 +1,4 @@
-import CustomInput from "../components/CustomInput";
+import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 
@@ -23,7 +23,7 @@ const ListProduct = () => {
 
           <div className="flex flex-row justify-center items-center mt-10 ">
             <div className="flex bg-[#F8F5F5] rounded-full w-[20rem] py-2 px-4 gap-2">
-              <CustomInput
+              <InputIcon
                 id="input-search"
                 type="search"
                 placeholder="Mencari Produk . . . . . ."
