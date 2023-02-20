@@ -105,20 +105,20 @@ function EditProfile() {
                         />
                       </svg>
                     </button>
-                    <input
+                    <CustomInput
+                      id="input-pencarian"
                       type="text"
                       placeholder="Pencarian..."
-                      className="input bg-slate-200  placeholder-black w-[27rem]"
+                      className="input bg-slate-200  placeholder-black w-[17rem]"
                     />
                   </div>
-                  <div></div>
                 </div>
               </div>
               <div className="flex w-[20%] justify-start items-center">
-                <FaShoppingCart className="text-black w-[4rem] h-[4rem] border-1 border-slate-300 p-3 rounded-md border-2" />
+                <FaShoppingCart className="text-black w-[3.5rem] h-[3.5rem] border-1 border-slate-300 p-3 rounded-md border-2" />
               </div>
             </div>
-            <div className=" w-full">
+            <div className=" flex flex-col ml-10 w-full">
               <h1 className="text-4xl font-bold font-poppins mt-20 ">
                 Edit Profile Tenant
               </h1>

@@ -32,10 +32,10 @@ const Content = () => {
       <div className="flex flex-col w-full">
         <div className="flex flex-row h-[8rem] mt-10">
           <div className="flex-1 ">
-            <h1 className="text-4xl font-poppins text-black font-bold mt-7 ml-6">
+            <h1 className="text-2xl font-poppins text-black font-bold mt-7 ml-8">
               Selamat Datang, Aldo
             </h1>
-            <p className="mt-3 text-gray-400 text-xl ml-6">
+            <p className="mt-3 text-gray-400 text-lg ml-8">
               Temukan, yang kamu butuhkan
             </p>
           </div>
@@ -61,14 +61,14 @@ const Content = () => {
                 <input
                   type="text"
                   placeholder="Pencarian..."
-                  className="input bg-slate-200  placeholder-black w-[75%]"
+                  className="input bg-slate-200  placeholder-black w-[65%]"
                 />
               </div>
               <div></div>
             </div>
           </div>
         </div>
-        <div className="w-full min-h-screen mt-10">
+        <div className="w-full min-h-screen mt-10 ml-3">
           <div className="grid grid-cols-3 gap-2">
             <div>
               <Card />
@@ -106,44 +106,44 @@ const Keranjang = () => {
     <>
       <div className="flex flex-col w-full min-h-screen shadow-lg">
         <div className="flex flex-row mt-20 justify-between">
-          <h2 className="text-2xl text-black font-poppins font-semibold ml-6">
+          <h2 className="text-xl text-black font-poppins font-semibold ml-6">
             Keranjang
           </h2>
-          <FaShoppingCart className="text-black w-[2rem] h-[2rem] mr-6 border-1 border-gray-500" />
+          <FaShoppingCart className="text-black w-[1.7rem] h-[1.7rem] mr-6 border-1 border-gray-500" />
         </div>
         <div className="mt-10">
           <CardKeranjang />
           <CardKeranjang />
           <CardKeranjang />
         </div>
-        <div className="form-control mx-auto mt-10">
-          <label className="input-group">
+        <div className="form-control ml-5 mt-10">
+          <label className="input-group ">
             <input
               type="text"
               placeholder="ID. Member"
-              className="input input-bordered border-1 bg-white"
+              className="input input-bordered border-1 bg-white w-6/12 "
             />
             <span className="bg-orangeComponent text-white">Member</span>
           </label>
         </div>
         <div className="w-11/12 h-[15rem] bg-gray-200 mx-auto rounded-xl mt-10 flex flex-row">
           <div className="flex-1 ">
-            <h1 className="ml-6 text-xl mt-9">Subtotal</h1>
-            <h1 className="ml-6 text-xl mt-2">Diskon</h1>
-            <h1 className="ml-6 text-xl mt-2">Total Pajak</h1>
+            <h1 className="ml-6 text-md mt-9">Subtotal</h1>
+            <h1 className="ml-6 text-md mt-2">Diskon</h1>
+            <h1 className="ml-6 text-md mt-2">Total Pajak</h1>
             <hr className="w-10/12 border-2 border-slate-400 float-right mt-2" />
-            <h1 className="ml-6 text-xl mt-6 font-bold">Total Jumlah</h1>
+            <h1 className="ml-6 text-md mt-6 font-bold ">Total Jumlah</h1>
           </div>
           <div className="flex-1">
-            <h1 className="ml-24 text-xl mt-9 text-black font-semibold">$20</h1>
-            <h1 className="ml-24 text-xl mt-2 text-black font-semibold">-$5</h1>
-            <h1 className="ml-24 text-xl mt-2 text-black font-semibold">-$5</h1>
+            <h1 className="ml-16 text-md mt-9 text-black font-semibold">$20</h1>
+            <h1 className="ml-16 text-md mt-2 text-black font-semibold">-$5</h1>
+            <h1 className="ml-16 text-md mt-2 text-black font-semibold">-$5</h1>
             <hr className="w-10/12 border-2  border-slate-400 float-left mt-2" />
-            <h1 className="ml-24 text-xl mt-6 text-black font-bold">$10</h1>
+            <h1 className="ml-16 text-md mt-6 text-black font-bold">$10</h1>
           </div>
         </div>
 
-        <div className="form-control w-full max-w-xs mx-auto mt-10">
+        <div className="form-control w-10/12 mx-auto mt-10">
           <label className="label">
             <span className="label-text text-black">Metode Pembayaran</span>
           </label>
@@ -161,7 +161,7 @@ const Keranjang = () => {
             id="btn-continuePayment"
             label="Lanjutkan Pembayaran"
             onClick={{}}
-            className="py-3 bg-orangeComponent text-white px-8 rounded-2xl hover:bg-orange-700"
+            className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
           />
         </div>
       </div>
@@ -181,30 +181,30 @@ const CardKeranjang = () => {
   }
   return (
     <>
-      <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[95%] bg-bgCard mx-auto rounded-xl">
+      <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">
         <div className=" w-[30%]">
           <img src={product1} className="rounded-lg shadow-md" />
         </div>
         <div className=" w-[70%] ">
-          <h1 className="text-xl text-black font-poppins font-semibold ml-3">
+          <h1 className="text-lgtext-black font-poppins font-semibold ml-3">
             Produk 1
           </h1>
           <div className="flex flex-row justify-between">
-            <h2 className="text-xl text-black mt-2 ml-3">$20</h2>
-            <div className="flex flex-row mr-2">
+            <h2 className="text-lg text-black mt-2 ml-3">$20</h2>
+            <div className="flex flex-row mr-2 mt-2">
               <CustomButton
                 id="btn-add"
                 label="+"
                 onClick={addProduct}
-                className="px-3 py-1 bg-orangeComponent text-white rounded-lg"
+                className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
               />
-              <p className="ml-3 text-xl text-black mt-1">{count}</p>
+              <p className=" text-md       text-black ">{count}</p>
               {count === 1 ? (
                 <CustomButton
                   id="btn-add"
                   label="-"
                   onClick={decProduct}
-                  className="px-3 py-1 bg-slate-300 text-white rounded-lg ml-3"
+                  className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                   disabled
                 />
               ) : (
@@ -212,7 +212,7 @@ const CardKeranjang = () => {
                   id="btn-add"
                   label="-"
                   onClick={decProduct}
-                  className="px-3 py-1 bg-orangeComponent text-white rounded-lg ml-3"
+                  className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                 />
               )}
             </div>

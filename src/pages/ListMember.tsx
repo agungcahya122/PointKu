@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
-
+import CustomButton from "../components/CustomButton";
+import { CustomInput } from "../components/CustomInput";
+import { Link } from "react-router-dom";
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
+import { FaArrowCircleLeft } from "react-icons/fa";
 
 import { FaArrowCircleLeft, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -148,7 +151,7 @@ const AddMember = () => {
             <SideNav />
           </div>
           <div className="flex w-[80%] min-h-screen">
-            <div className="flex flex-col w-full overflow-hidden ">
+            <div className="flex flex-col w-full overflow-hidden ml-16 ">
               <div className="flex flex-row h-[8rem] mt-10 ">
                 <div className="flex w-[40%] ">
                   <Link to="/listMember">
@@ -156,7 +159,7 @@ const AddMember = () => {
                       id="btn-kembaliProfil"
                       icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
                       label="Kembali"
-                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4   flex flex-row hover:rounded-xl "
+                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4 flex flex-row hover:rounded-xl"
                     />
                   </Link>
                 </div>
@@ -242,7 +245,7 @@ const EditMember = () => {
             <SideNav />
           </div>
           <div className="flex w-[80%] min-h-screen">
-            <div className="flex flex-col w-full overflow-hidden ">
+            <div className="flex flex-col w-full overflow-hidden ml-16 ">
               <div className="flex flex-row h-[8rem] mt-10 ">
                 <div className="flex w-[40%] ">
                   <Link to="/listMember">
@@ -314,7 +317,7 @@ const EditMember = () => {
                     <CustomButton
                       id="btn-perbaruiTenant"
                       label="Perbarui Data Member"
-                      className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
+                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
                     />
                   </div>
                 </div>
