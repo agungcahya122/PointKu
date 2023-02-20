@@ -10,6 +10,8 @@ module.exports = {
         color3: "#222222",
         color4: "#9F9F9F",
         BgSidebar: "#FBFBFB",
+        bgSearch: "#F8F5F5",
+        bgCard: "#FAF9F9",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
