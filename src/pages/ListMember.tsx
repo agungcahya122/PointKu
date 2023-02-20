@@ -11,6 +11,10 @@ import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { FaArrowCircleLeft } from "react-icons/fa";
 
+import { FaArrowCircleLeft, FaShoppingCart } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { CustomInput } from "../components/CustomInput";
+import CustomButton from "../components/CustomButton";
 const ListMember = () => {
   const navigate = useNavigate();
 
@@ -155,7 +159,7 @@ const AddMember = () => {
                       id="btn-kembaliProfil"
                       icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
                       label="Kembali"
-                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4 flex flex-row hover:rounded-xl "
+                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4 flex flex-row hover:rounded-xl"
                     />
                   </Link>
                 </div>
@@ -219,7 +223,7 @@ const AddMember = () => {
                     <CustomButton
                       id="btn-perbaruiTenant"
                       label="Tambah Member Baru"
-                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
+                      className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
                     />
                   </div>
                 </div>

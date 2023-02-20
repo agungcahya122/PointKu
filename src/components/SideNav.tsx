@@ -37,7 +37,7 @@ export default function SideNav() {
               />
             </li>
 
-            <li className="mt-4 ml-5">
+            <li className="mt-4 ml-5" onClick={() => navigate("/listProduct")}>
               <CustomButton
                 id="btn-produk"
                 icon={<FaBoxOpen className="w-[1.5rem] h-[1.5rem] mr-5" />}
@@ -45,15 +45,19 @@ export default function SideNav() {
                 className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
             </li>
-            <li className="mt-4 ml-5">
-              <CustomButton
-                id="btn-member"
-                icon={<FaPeopleArrows className="w-[1.5rem] h-[1.5rem] mr-5" />}
-                label="Member"
-                className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
-              />
+            <li className="mt-4 ml-5" onClick={() => navigate("/listMember")}>
+              <Link to="/listMember">
+                <CustomButton
+                  id="btn-member"
+                  icon={
+                    <FaPeopleArrows className="w-[1.5rem] h-[1.5rem] mr-5" />
+                  }
+                  label="Member"
+                  className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                />
+              </Link>
             </li>
-            <li className="mt-4 ml-5">
+            <li className="mt-4 ml-5" onClick={() => navigate("/report")}>
               <CustomButton
                 id="btn-laporan"
                 icon={<FaBookReader className="w-[1.5rem] h-[1.5rem] mr-5" />}
