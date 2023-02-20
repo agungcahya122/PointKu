@@ -10,7 +10,7 @@ import { Profile, EditProfile } from "../pages/Profile";
 
 import AddProduct from "../pages/AddProduct";
 import EditProduct from "../pages/EditProduct";
-import ListMember from "../pages/ListMember";
+import { AddMember, EditMember, ListMember } from "../pages/ListMember";
 import Report from "../pages/Report";
 
 function App() {
@@ -50,6 +50,14 @@ function App() {
     {
       path: "/listMember",
       element: <ListMember />,
+    },
+    {
+      path: "/addMember",
+      element: <AddMember />,
+    },
+    {
+      path: "/editMember",
+      element: <EditMember />,
     },
     {
       path: "/report",

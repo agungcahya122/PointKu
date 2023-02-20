@@ -23,7 +23,7 @@ export default function SideNav() {
         <div className="flex flex-col ">
           <div className="flex flex-row justify-center mt-10">
             <img src={salesLogo} className="w-2/12 mt-5" />
-            <h2 className="mt-8 text-4xl font-extrabold font-poppins text-orangeComponent tracking-widest ml-2">
+            <h2 className="mt-8 text-2xl font-extrabold font-poppins text-orangeComponent tracking-widest ml-2">
               POINTKU
             </h2>
           </div>
@@ -31,44 +31,42 @@ export default function SideNav() {
             <li className="ml-5">
               <CustomButton
                 id="btn-beranda"
-                icon={<FaHome className="w-[1.8rem] h-[1.8rem] mr-5" />}
+                icon={<FaHome className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Beranda"
-                className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
             </li>
 
             <li className="mt-4 ml-5">
               <CustomButton
                 id="btn-produk"
-                icon={<FaBoxOpen className="w-[1.8rem] h-[1.8rem] mr-5" />}
+                icon={<FaBoxOpen className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Produk"
-                className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
             </li>
             <li className="mt-4 ml-5">
               <CustomButton
                 id="btn-member"
-                icon={<FaPeopleArrows className="w-[1.8rem] h-[1.8rem] mr-5" />}
+                icon={<FaPeopleArrows className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Member"
-                className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
-
             </li>
             <li className="mt-4 ml-5">
               <CustomButton
                 id="btn-laporan"
-                icon={<FaBookReader className="w-[1.8rem] h-[1.8rem] mr-5" />}
+                icon={<FaBookReader className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Laporan"
-                className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
-
             </li>
             <li className="mt-4 ml-5">
               <CustomButton
                 id="btn-keluar"
-                icon={<FaShareSquare className="w-[1.8rem] h-[1.8rem] mr-5" />}
+                icon={<FaShareSquare className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Keluar"
-                className="text-2xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
             </li>
           </ul>
@@ -80,7 +78,7 @@ export default function SideNav() {
                   <h1 className="text-xl font-poppins font-semibold text-black mt-3">
                     Aldo Barrado
                   </h1>
-                  <p className="text-md font-poppins font-semibold text-grey">
+                  <p className="text-md text-slate-400 font-poppins font-semibold text-grey">
                     Tenant
                   </p>
                   <Link to="/profile">
@@ -90,7 +88,7 @@ export default function SideNav() {
                       className="px-6 py-2 bg-gray-200 text-black font-normal rounded-xl mt-3 hover:bg-black hover:text-white"
                     />
                   </Link>
-                  <p className="mt-5 font-poppins font-semibold text-lg">
+                  <p className="mt-5 font-poppins font-semibold text-lg text-slate-400">
                     @2023 Pointku App
                   </p>
                 </div>
