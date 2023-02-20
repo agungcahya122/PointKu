@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
@@ -7,6 +9,8 @@ import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 
 const ListProduct = () => {
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <div className="grid grid-cols-12">
@@ -31,7 +35,10 @@ const ListProduct = () => {
               />
               <MdSearch className="w-8 h-8 text-color3" />
             </div>
-            <div className="py-2 mt-0 px-4 bg-orangeComponent h-10 text-[16px] font-medium text-color1 rounded-3xl text-center ml-auto hover:cursor-pointer">
+            <div
+              className="py-2 mt-0 px-4 bg-orangeComponent h-10 text-[16px] font-medium text-color1 rounded-3xl text-center ml-auto hover:cursor-pointer"
+              onClick={() => navigate("/addProduct")}
+            >
               Tambah Produk
             </div>
           </div>
@@ -68,16 +75,26 @@ const ListProduct = () => {
                   <td>Rp 3000</td>
                   <td className="text-center">20</td>
                   <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53]">
+                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
                       <IoTrashOutline className="w-5 h-5" />
                       <p className="text-[14px] pt-1">Hapus</p>
                     </div>
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75]">
-                      <FiEdit className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Edit</p>
+
+                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
+                      <FiEdit
+                        className="w-5 h-5"
+                        onClick={() => navigate("/editProduct")}
+                      />
+                      <p
+                        className="text-[14px] pt-1"
+                        onClick={() => navigate("/editProduct")}
+                      >
+                        Edit
+                      </p>
                     </div>
                   </td>
                 </tr>
+
                 <tr>
                   <td className="text-center">2</td>
                   <td>Beras 10 kg</td>
@@ -85,13 +102,21 @@ const ListProduct = () => {
                   <td>Rp 50000</td>
                   <td className="text-center">10</td>
                   <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53]">
+                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
                       <IoTrashOutline className="w-5 h-5" />
                       <p className="text-[14px] pt-1">Hapus</p>
                     </div>
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75]">
-                      <FiEdit className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Edit</p>
+                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
+                      <FiEdit
+                        className="w-5 h-5"
+                        onClick={() => navigate("/editProduct")}
+                      />
+                      <p
+                        className="text-[14px] pt-1"
+                        onClick={() => navigate("/editProduct")}
+                      >
+                        Edit
+                      </p>
                     </div>
                   </td>
                 </tr>
