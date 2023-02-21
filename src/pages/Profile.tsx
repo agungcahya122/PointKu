@@ -48,10 +48,9 @@ function Profile() {
         setUser(data);
       })
       .catch((err) => {
-        const { data } = err.response.data.message;
         MySwal.fire({
           title: "Error",
-          text: data,
+          text: err.response.data.message,
           showCancelButton: false,
         });
       })
