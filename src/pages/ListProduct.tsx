@@ -1,16 +1,84 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
+import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
+import { productData } from "../utils/types/DataTypes";
+import axios from "axios";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "../utils/Swal";
+
+const MySwal = withReactContent(Swal);
 
 const ListProduct = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<productData[]>([]);
+  const [cookie, removeCookie] = useCookies(["token"]);
+  const checkToken = cookie.token;
+  const { product_id } = useParams();
 
+  function onClickEdit() {
+    navigate(`/editProduct/${product_id}`);
+  }
+
+  const fetchData = () => {
+    axios
+      .get(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products",
+        {
+          headers: {
+            Authorization: `Bearer ${checkToken}`,
+          },
+          params: {},
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        setData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleDeleteProduct = async (data: productData[]) => {
+    axios
+      .delete(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products/${product_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${checkToken}`,
+          },
+          params: {},
+        }
+      )
+      .then((res) => {
+        const { data, message } = res.data;
+        setData(data);
+
+        MySwal.fire({
+          title: "Data Produk Berhasil Dihapus",
+          text: message,
+          showCancelButton: false,
+        });
+        setData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Layout>
       <div className="grid grid-cols-12">
@@ -68,58 +136,38 @@ const ListProduct = () => {
                 </tr>
               </thead>
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)]">
-                <tr>
-                  <td className="text-center">1</td>
-                  <td>Indomie Goreng</td>
-                  <td className="text-center">Makanan</td>
-                  <td>Rp 3000</td>
-                  <td className="text-center">20</td>
-                  <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                      <IoTrashOutline className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Hapus</p>
-                    </div>
+                {data?.map((item, index) => (
+                  <>
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{item.product_name}</td>
+                      <td>{item.category}</td>
+                      <td>{item.price}</td>
+                      <td>{item.stock}</td>
+                      <td className="flex justify-center gap-5">
+                        <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
+                          <IoTrashOutline
+                            className="w-5 h-5"
+                            onClick={() => handleDeleteProduct(data)}
+                          />
+                          <p
+                            className="text-[14px] pt-1"
+                            onClick={() => handleDeleteProduct(data)}
+                          >
+                            Hapus
+                          </p>
+                        </div>
 
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
-                      <FiEdit
-                        className="w-5 h-5"
-                        onClick={() => navigate("/editProduct")}
-                      />
-                      <p
-                        className="text-[14px] pt-1"
-                        onClick={() => navigate("/editProduct")}
-                      >
-                        Edit
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-center">2</td>
-                  <td>Beras 10 kg</td>
-                  <td className="text-center">Bahan Makanan</td>
-                  <td>Rp 50000</td>
-                  <td className="text-center">10</td>
-                  <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                      <IoTrashOutline className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Hapus</p>
-                    </div>
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
-                      <FiEdit
-                        className="w-5 h-5"
-                        onClick={() => navigate("/editProduct")}
-                      />
-                      <p
-                        className="text-[14px] pt-1"
-                        onClick={() => navigate("/editProduct")}
-                      >
-                        Edit
-                      </p>
-                    </div>
-                  </td>
-                </tr>
+                        <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
+                          <FiEdit className="w-5 h-5" onClick={onClickEdit} />
+                          <p className="text-[14px] pt-1" onClick={onClickEdit}>
+                            Edit
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  </>
+                ))}
               </tbody>
             </table>
           </div>

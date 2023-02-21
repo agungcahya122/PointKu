@@ -60,7 +60,7 @@ function App() {
       element: <AddProduct />,
     },
     {
-      path: "/editProduct",
+      path: "/editProduct/:product_id",
       element: <EditProduct />,
     },
     {
