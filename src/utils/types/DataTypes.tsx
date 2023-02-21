@@ -10,6 +10,13 @@ export interface MembersTypes {
   data?: Member[];
 }
 
+export interface MemberIdTypes {
+  email?: string;
+  name?: string;
+  address?: any;
+  phone_number?: string;
+}
+
 type Member = {
   id?: number;
   email?: string;
