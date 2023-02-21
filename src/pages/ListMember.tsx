@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -9,7 +9,9 @@ import SideNav from "../components/SideNav";
 import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
 
+import withReactContent from "sweetalert2-react-content";
 import { MembersTypes } from "../utils/types/DataTypes";
+import Swal from "../utils/Swal";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
@@ -123,11 +125,11 @@ const ListMember = () => {
                         <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
                           <FiEdit
                             className="w-5 h-5"
-                            onClick={() => navigate("/editMember")}
+                            onClick={() => navigate(`/editMember/${data.id}`)}
                           />
                           <p
                             className="text-[14px] pt-1"
-                            onClick={() => navigate("/editMember")}
+                            onClick={() => navigate(`/editMember/${data.id}`)}
                           >
                             Edit
                           </p>
@@ -240,6 +242,42 @@ const AddMember = () => {
 };
 
 const EditMember = () => {
+  const navigate = useNavigate();
+  const { customer_id } = useParams();
+  const MySwal = withReactContent(Swal);
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [nama, setNama] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  // function fetchData() {
+  //   setLoading(true);
+  //   axios
+  //     .get(
+  //       `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/cutomers/${customer_id}`,
+  //       {
+  //         headers: { Authorization: `Bearer ${checkToken}` },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       const { data } = res.data;
+  //       console.log(data);
+  //     })
+  //     .catch((err) => {
+  //       alert(err.toString());
+  //     })
+  //     .finally(() => setLoading(false));
+  // }
+
   return (
     <>
       <Layout>
