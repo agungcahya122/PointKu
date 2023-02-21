@@ -22,7 +22,6 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [responseToken, setResponseToken] = useState<any>("");
 
   useEffect(() => {
     if (email && password) {
@@ -48,10 +47,7 @@ const Login = () => {
       .then((res) => {
         const { data, message } = res.data;
         localStorage.setItem("token", JSON.stringify(data.token));
-        setCookie("token", data.token, { path: "/" });
-        setCookie("token", responseToken, { path: "/" });
-        const token = localStorage.getItem(JSON.parse("token") || "{}");
-        setResponseToken(token);
+        setCookie("token", res.data.token, { path: "/" });
 
         console.log(data.token);
         console.log(body);
@@ -66,7 +62,7 @@ const Login = () => {
         navigate("/home");
       })
       .catch((err) => {
-        alert(err.response.data.message);
+        console.log(err);
       })
       .finally(() => setLoading(false));
   };
