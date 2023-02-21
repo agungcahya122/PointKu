@@ -80,7 +80,7 @@ function App() {
       element: <AddMember />,
     },
     {
-      path: "/editMember",
+      path: "/editMember/:customer_id",
       element: <EditMember />,
     },
     {

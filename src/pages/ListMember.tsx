@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -9,7 +9,9 @@ import SideNav from "../components/SideNav";
 import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
 
-import { MembersTypes } from "../utils/types/DataTypes";
+import withReactContent from "sweetalert2-react-content";
+import { MemberIdTypes, MembersTypes } from "../utils/types/DataTypes";
+import Swal from "../utils/Swal";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
@@ -115,19 +117,14 @@ const ListMember = () => {
                       <td>{data.phone_number}</td>
                       <td className="text-center">{data.email}</td>
                       <td className="flex justify-center gap-5">
-                        <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                          <IoTrashOutline className="w-5 h-5" />
-                          <p className="text-[14px] pt-1">Hapus</p>
-                        </div>
-
                         <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
                           <FiEdit
                             className="w-5 h-5"
-                            onClick={() => navigate("/editMember")}
+                            onClick={() => navigate(`/editMember/${data.id}`)}
                           />
                           <p
                             className="text-[14px] pt-1"
-                            onClick={() => navigate("/editMember")}
+                            onClick={() => navigate(`/editMember/${data.id}`)}
                           >
                             Edit
                           </p>
@@ -240,6 +237,97 @@ const AddMember = () => {
 };
 
 const EditMember = () => {
+  const navigate = useNavigate();
+  const { customer_id } = useParams();
+  const MySwal = withReactContent(Swal);
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [objSubmit, setObjSubmit] = useState<MemberIdTypes>({});
+  const [nama, setNama] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/cutomers/${customer_id}`,
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        setNama(data.name);
+        setPhone(data.phone_number);
+        setAddress(data.address);
+        setEmail(data.email);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+      .finally(() => setLoading(false));
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    const formData = new FormData();
+    let key: keyof typeof objSubmit;
+    for (key in objSubmit) {
+      formData.append(key, objSubmit[key]);
+    }
+
+    axios
+      .put(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/cutomers/${customer_id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${checkToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        const { message } = res.data;
+
+        MySwal.fire({
+          title: "Edit Succes",
+          text: message,
+          showCancelButton: false,
+          confirmButtonText: "Oke",
+        }).then(() => {
+          navigate("/listMember");
+        });
+        setObjSubmit({});
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        MySwal.fire({
+          title: "Edit Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
+      })
+      .finally(() => fetchData())
+      .finally(() => setLoading(false));
+  };
+
+  const handleChange = (value: string, key: keyof typeof objSubmit) => {
+    let temp = { ...objSubmit };
+    temp[key] = value;
+    setObjSubmit(temp);
+  };
+
   return (
     <>
       <Layout>
@@ -265,7 +353,11 @@ const EditMember = () => {
                 <h1 className="text-4xl font-bold font-poppins mt-20 ">
                   Edit Member PointKu
                 </h1>
-                <div className="flex flex-row">
+
+                <form
+                  className="flex flex-row"
+                  onSubmit={(e) => handleSubmit(e)}
+                >
                   <div className="flex-1 flex-col ">
                     <div className="form-control w-full mt-16">
                       <label className="label">
@@ -276,8 +368,10 @@ const EditMember = () => {
                       <CustomInput
                         id="input-nama"
                         type="text"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 "
+                        placeholder="Type here"
+                        defaultValue={nama}
+                        onChange={(e) => handleChange(e.target.value, "name")}
                       />
                       <label className="label mt-8">
                         <span className="label-text text-lg text-black">
@@ -287,8 +381,10 @@ const EditMember = () => {
                       <CustomInput
                         id="input-nama"
                         type="email"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 "
+                        placeholder="Type here"
+                        defaultValue={email}
+                        onChange={(e) => handleChange(e.target.value, "email")}
                       />
                     </div>
                   </div>
@@ -303,8 +399,12 @@ const EditMember = () => {
                       <CustomInput
                         id="input-nama"
                         type="text"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 "
+                        placeholder="Type here"
+                        defaultValue={phone}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "phone_number")
+                        }
                       />
                       <label className="label mt-8">
                         <span className="label-text text-lg text-black">
@@ -313,17 +413,22 @@ const EditMember = () => {
                       </label>
                       <textarea
                         id="input-nama"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 h-[11rem]"
+                        placeholder="Type here"
+                        defaultValue={address}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "address")
+                        }
                       ></textarea>
                     </div>
                     <CustomButton
                       id="btn-perbaruiTenant"
                       label="Perbarui Data Member"
-                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
+                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-color3"
+                      loading={loading}
                     />
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
