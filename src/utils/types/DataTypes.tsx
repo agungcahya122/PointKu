@@ -5,3 +5,15 @@ export interface UserTypes {
   password?: string;
   address?: any;
 }
+
+export interface MembersTypes {
+  data?: Member[];
+}
+
+type Member = {
+  id?: number;
+  email?: string;
+  name?: string;
+  phone_number?: string;
+  address?: string;
+};

@@ -1,11 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
 import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
-import { Link } from "react-router-dom";
+
+import { MembersTypes } from "../utils/types/DataTypes";
+
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
@@ -13,6 +18,33 @@ import { FaArrowCircleLeft } from "react-icons/fa";
 
 const ListMember = () => {
   const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [customers, setCustomers] = useState<MembersTypes>({});
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/customers",
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((res) => {
+        setCustomers(res.data);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+      .finally(() => setLoading(false));
+  }
 
   return (
     <Layout>
@@ -72,63 +104,38 @@ const ListMember = () => {
               </thead>
 
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)] text-[14px]">
-                <tr>
-                  <td className="text-center">1</td>
-                  <td>Rahma Aprillia Sari</td>
-                  <td className="text-center text-[14px]">
-                    Jl.Ampel no.12, RT/RW 001/003, Sukun, Malang
-                  </td>
-                  <td>089534568976</td>
-                  <td className="text-center">rahmaaprillia@gmail.com</td>
-                  <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                      <IoTrashOutline className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Hapus</p>
-                    </div>
+                <>
+                  {customers.data?.map((data, index) => (
+                    <tr key={data.id}>
+                      <td className="text-center">{index + 1}</td>
+                      <td>{data.name}</td>
+                      <td className="text-center text-[14px]">
+                        {data.address}
+                      </td>
+                      <td>{data.phone_number}</td>
+                      <td className="text-center">{data.email}</td>
+                      <td className="flex justify-center gap-5">
+                        <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
+                          <IoTrashOutline className="w-5 h-5" />
+                          <p className="text-[14px] pt-1">Hapus</p>
+                        </div>
 
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
-                      <FiEdit
-                        className="w-5 h-5"
-                        onClick={() => navigate("/editMember")}
-                      />
-                      <p
-                        className="text-[14px] pt-1"
-                        onClick={() => navigate("/editMember")}
-                      >
-                        Edit
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-center">2</td>
-                  <td>M Agung Cahya D</td>
-                  <td className="text-center text-[14px]">
-                    Jl.Nusantara no.03, RT/RW 001/003, Garum, Blitar
-                  </td>
-                  <td>089678985678</td>
-                  <td className="text-center">agungcahya@gmail.com</td>
-                  <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                      <IoTrashOutline className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Hapus</p>
-                    </div>
-
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
-                      <FiEdit
-                        className="w-5 h-5"
-                        onClick={() => navigate("/editMember")}
-                      />
-                      <p
-                        className="text-[14px] pt-1"
-                        onClick={() => navigate("/editMember")}
-                      >
-                        Edit
-                      </p>
-                    </div>
-                  </td>
-                </tr>
+                        <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
+                          <FiEdit
+                            className="w-5 h-5"
+                            onClick={() => navigate("/editMember")}
+                          />
+                          <p
+                            className="text-[14px] pt-1"
+                            onClick={() => navigate("/editMember")}
+                          >
+                            Edit
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </>
               </tbody>
             </table>
           </div>

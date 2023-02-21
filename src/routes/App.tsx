@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Register from "../pages/Auth/Register";
@@ -65,7 +69,7 @@ function App() {
     },
     {
       path: "/editProfile",
-      element: <EditProfile />,
+      element: checkToken ? <EditProfile /> : <Navigate to={"/"} />,
     },
     {
       path: "/listMember",
