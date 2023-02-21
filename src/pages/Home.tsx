@@ -93,7 +93,6 @@ const Content = () => {
         <CustomButton
           id="btn-loadMore"
           label="Lihat Lebih Banyak"
-          onClick={{}}
           className="bg-white border-2 border-orangeComponent rounded-xl py-3 mx-auto text-orangeComponent font-poppins font-semibold w-[30%] mt-10 hover:bg-orangeComponent hover:text-white hover:border-none"
         />
       </div>
@@ -160,7 +159,6 @@ const Keranjang = () => {
           <CustomButton
             id="btn-continuePayment"
             label="Lanjutkan Pembayaran"
-            onClick={{}}
             className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
           />
         </div>
@@ -170,7 +168,7 @@ const Keranjang = () => {
 };
 
 const CardKeranjang = () => {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState<number>(1);
 
   function addProduct() {
     setCount((prevState) => prevState + 1);

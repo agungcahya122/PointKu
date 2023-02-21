@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import {
   FaHome,
   FaBoxOpen,
@@ -11,11 +11,26 @@ import {
 import salesLogo from "../assets/sales.webp";
 import avatarIcon from "../assets/avatarIcon.webp";
 import CustomButton from "./CustomButton";
+import withReactContent from "sweetalert2-react-content";
 
 import Home from "../pages/Home";
+import Swal from "../utils/Swal";
 
 export default function SideNav() {
+  const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
+  const [responseToken, setResponseToken] = useState<any>("");
+
+  const handleLogout = () => {
+    const remove = localStorage.removeItem("token");
+    setResponseToken(remove);
+    Swal.fire({
+      title: "Berhasil Logout",
+      text: "User Logout",
+      showCancelButton: false,
+    });
+    navigate("/");
+  };
 
   return (
     <>
@@ -71,6 +86,7 @@ export default function SideNav() {
                 icon={<FaShareSquare className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Keluar"
                 className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
+                onClick={handleLogout}
               />
             </li>
           </ul>
