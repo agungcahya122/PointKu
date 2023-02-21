@@ -58,3 +58,27 @@ type ProductType = {
   product_image?: string;
   supplier?: string;
 };
+export interface transactionType {
+  created_at: string;
+  customer_id: number;
+  customer_name: string;
+  discount: number;
+  id: number;
+  invoice_number: string;
+  invoice_url: string;
+  payment_url: string;
+  total_bill: number;
+  total_price: number;
+  transaction_Status: string;
+  transaction_status: string;
+  TransactionProductRes: [
+    {
+      price: number;
+      product_id: number;
+      product_image: string;
+      product_name: string;
+      quantity: number;
+      total_price: number;
+    }
+  ];
+}

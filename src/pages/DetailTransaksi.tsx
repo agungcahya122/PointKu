@@ -1,72 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, FC } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import withReactContent from "sweetalert2-react-content";
+import { useCookies } from "react-cookie";
+import moment from "moment";
+import axios from "axios";
+
+import Swal from "../utils/Swal";
+import { transactionType } from "../utils/types/DataTypes";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
 import CustomButton from "../components/CustomButton";
 
-function CardTransaksi() {
-  const [count, setCount] = useState(1);
-
-  function addProduct() {
-    setCount((prevState) => prevState + 1);
-  }
-
-  function decProduct() {
-    setCount((count) => count - 1);
-  }
-  return (
-    <>
-      <div className="rounded-xl border mt-10 p-5  shadow-lg font-medium text-lg w-full">
-        <div className="flex">
-          <img
-            src={product1}
-            alt="produk"
-            className="w-1/5 rounded-lg"
-          />
-          <div className="flex flex-col font-bold">
-            <p className="pl-3">Nama produk</p>
-            <div className="flex justify-between gap-52 border-b-2 border-gray-200">
-              <p className="p-3">Jumlah Beli</p>
-              <div className="flex">
-                <CustomButton
-                  id="btn-add"
-                  label="+"
-                  onClick={addProduct}
-                  className="px-3 py-1 bg-orangeComponent text-white rounded-lg"
-                />
-                <p className="ml-3 text-xl text-black mt-1">
-                  {count}
-                </p>
-                {count === 1 ? (
-                  <CustomButton
-                    id="btn-add"
-                    label="-"
-                    onClick={decProduct}
-                    className="px-3 py-1 bg-slate-300 text-white rounded-lg ml-3"
-                    disabled
-                  />
-                ) : (
-                  <CustomButton
-                    id="btn-add"
-                    label="-"
-                    onClick={decProduct}
-                    className="px-3 py-1 bg-orangeComponent text-white rounded-lg ml-3"
-                  />
-                )}
-              </div>
-              <p>2 x 15.000</p>
-            </div>
-            <p className="self-end pt-3">
-              Total Pembelian: 30.000
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 function DetailTransaksi() {
+  const [datas, setDatas] = useState<transactionType>();
+  const { transaction_id } = useParams();
+  const [total_quantity, setTotal_quantity] = useState(0);
+  const [refresh, setRefresh] = useState(false);
+  const [isDisable, setIsDisable] = useState(false);
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+  const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+
+  useEffect(() => {
+    fetchData();
+  }, [refresh]);
+
+  function fetchData() {
+    axios
+      .get(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/transactions/1`,
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((customer) => {
+        const { data } = customer.data;
+        setDatas(data);
+        let sum = 0;
+        data.TransactionProductRes.forEach((item: any) => {
+          sum += item.quantity;
+        });
+        setTotal_quantity(sum);
+      })
+      .catch((error) => {
+        MySwal.fire({
+          title: "Gagal",
+          text: error.response.data.message,
+          showCancelButton: false,
+        });
+      });
+  }
+
   return (
     <Layout>
       <div className="flex flex-row">
@@ -82,27 +68,74 @@ function DetailTransaksi() {
                 <h1 className="underline font-bold text-lg">
                   Invoice
                 </h1>
-                <p>INV/2022-01-05/MKN/01</p>
+                <p>INV/MPL/{datas?.id}</p>
               </div>
               <br />
               <div className="flex justify-between ">
                 <h1 className="underline font-bold text-lg">
                   Nama Pembeli
                 </h1>
-                <p>Marinah Mari</p>
+                <p>{datas?.customer_name}</p>
               </div>
               <br />
               <div className="flex justify-between ">
                 <h1 className="underline font-bold text-lg">
                   Tanggal Pembelian
                 </h1>
-                <p>12 Januari 2023, 15:00 WIB</p>
+                <p>
+                  {moment(datas?.created_at).format(
+                    "DD MMMM YYYY h:mm:ss"
+                  )}
+                </p>
               </div>
               <br />
               <h1 className="underline font-bold text-lg">
                 Detail Produk
               </h1>
-              <CardTransaksi />
+
+              {datas?.TransactionProductRes &&
+                datas.TransactionProductRes.map(
+                  (data, index) => (
+                    <div
+                      className="rounded-xl border mt-10 p-5  shadow-lg font-medium text-lg w-full"
+                      key={index}
+                    >
+                      <div className="flex">
+                        <img
+                          src={product1}
+                          alt="produk"
+                          className="w-1/5 rounded-lg"
+                        />
+                        <div className="flex flex-col font-bold">
+                          <p className="pl-3">
+                            {data.product_name}
+                          </p>
+                          <div className="flex justify-between gap-[34rem] border-b-2 border-gray-200">
+                            <p className="p-3">Jumlah Beli</p>
+                            <p>
+                              {data.quantity} x Rp.{" "}
+                              {data.price
+                                .toString()
+                                .replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  "."
+                                )}
+                            </p>
+                          </div>
+                          <p className="self-end pt-3">
+                            Total Pembelian : Rp.{" "}
+                            {data.total_price
+                              .toString()
+                              .replace(
+                                /\B(?=(\d{3})+(?!\d))/g,
+                                "."
+                              )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
               <h1 className="underline font-bold text-lg pt-12">
                 Rincian Pembayaran
               </h1>
