@@ -1,14 +1,21 @@
-import { FaArrowCircleLeft, FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+
+import withReactContent from "sweetalert2-react-content";
+import { UserTypes } from "../utils/types/DataTypes";
+import Swal from "../utils/Swal";
+
 import { CustomInput } from "../components/CustomInput";
-import React from "react";
+import CustomButton from "../components/CustomButton";
+import avatarIcon from "../assets/avatarIcon.webp";
+import SideNav from "../components/SideNav";
+import Layout from "../components/Layout";
+
+import { FaArrowCircleLeft, FaShoppingCart } from "react-icons/fa";
 import { TfiLocationPin } from "react-icons/tfi";
 import { IoCallOutline } from "react-icons/io5";
-
-import Layout from "../components/Layout";
-import SideNav from "../components/SideNav";
-import avatarIcon from "../assets/avatarIcon.webp";
-import CustomButton from "../components/CustomButton";
 
 function Profile() {
   return (
@@ -67,6 +74,97 @@ function Profile() {
 }
 
 function EditProfile() {
+  const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+
+  const [objSubmit, setObjSubmit] = useState<UserTypes>({});
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [namaToko, setNamaToko] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [telepon, setTelepon] = useState<string>("");
+  const [addres, setAddres] = useState<string>("");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/users",
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((res) => {
+        const { data, message } = res.data;
+
+        setNamaToko(data.business_name);
+        setEmail(data.email);
+        setAddres(data.address);
+        setTelepon(data.phone_number);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+      .finally(() => setLoading(false));
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    const formData = new FormData();
+    let key: keyof typeof objSubmit;
+    for (key in objSubmit) {
+      formData.append(key, objSubmit[key]);
+    }
+
+    axios
+      .put(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/users",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${checkToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        const { message } = res.data;
+
+        MySwal.fire({
+          title: "Edit Succes",
+          text: message,
+          showCancelButton: false,
+          confirmButtonText: "Oke",
+        }).then(() => {
+          navigate("/profile");
+        });
+        setObjSubmit({});
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        MySwal.fire({
+          title: "Edit Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
+      })
+      .finally(() => fetchData())
+      .finally(() => setLoading(false));
+  };
+
+  const handleChange = (value: string, key: keyof typeof objSubmit) => {
+    let temp = { ...objSubmit };
+    temp[key] = value;
+    setObjSubmit(temp);
+  };
+
   return (
     <Layout>
       <div className="flex flex-row">
@@ -122,7 +220,7 @@ function EditProfile() {
               <h1 className="text-4xl font-bold font-poppins mt-20 ">
                 Edit Profile Tenant
               </h1>
-              <div className="flex flex-row">
+              <form className="flex flex-row" onSubmit={(e) => handleSubmit(e)}>
                 <div className="flex-1 flex-col ">
                   <div className="form-control w-full mt-16">
                     <label className="label">
@@ -133,8 +231,12 @@ function EditProfile() {
                     <CustomInput
                       id="input-nama"
                       type="text"
+                      className="input input-bordered w-10/12"
                       placeholder="Type here"
-                      className="input input-bordered w-10/12 "
+                      defaultValue={namaToko}
+                      onChange={(e) =>
+                        handleChange(e.target.value, "business_name")
+                      }
                     />
                     <label className="label mt-8">
                       <span className="label-text text-lg text-black">
@@ -144,8 +246,10 @@ function EditProfile() {
                     <CustomInput
                       id="input-nama"
                       type="email"
-                      placeholder="Type here"
                       className="input input-bordered w-10/12 "
+                      placeholder="Type here"
+                      defaultValue={email}
+                      onChange={(e) => handleChange(e.target.value, "email")}
                     />
                     <label className="label mt-8">
                       <span className="label-text text-lg text-black    ">
@@ -155,16 +259,21 @@ function EditProfile() {
                     <CustomInput
                       id="input-nama"
                       type="password"
-                      placeholder="Type here"
                       className="input input-bordered w-10/12"
+                      placeholder="Type here"
+                      defaultValue={"************"}
+                      onChange={(e) => handleChange(e.target.value, "password")}
                     />
                   </div>
+
                   <CustomButton
                     id="btn-perbaruiTenant"
                     label="Perbarui Profil"
-                    className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
+                    className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-color3"
+                    loading={loading}
                   />
                 </div>
+
                 <div className="flex-1 flex-col ">
                   {" "}
                   <div className="form-control w-full mt-16">
@@ -176,8 +285,12 @@ function EditProfile() {
                     <CustomInput
                       id="input-nama"
                       type="text"
-                      placeholder="Type here"
                       className="input input-bordered w-10/12 "
+                      placeholder="Type here"
+                      defaultValue={telepon}
+                      onChange={(e) =>
+                        handleChange(e.target.value, "phone_number")
+                      }
                     />
                     <label className="label mt-8">
                       <span className="label-text text-lg text-black">
@@ -186,12 +299,14 @@ function EditProfile() {
                     </label>
                     <textarea
                       id="input-nama"
-                      placeholder="Type here"
                       className="input input-bordered w-10/12 h-[11rem]"
+                      placeholder="Type here"
+                      defaultValue={addres}
+                      onChange={(e) => handleChange(e.target.value, "address")}
                     ></textarea>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
