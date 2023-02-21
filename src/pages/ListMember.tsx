@@ -10,7 +10,10 @@ import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
 
 import withReactContent from "sweetalert2-react-content";
-import { MemberIdTypes, MembersTypes } from "../utils/types/DataTypes";
+import {
+  MemberIdTypes,
+  MembersTypes,
+} from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
@@ -85,7 +88,7 @@ const ListMember = () => {
               <thead className="">
                 <tr>
                   <th className="bg-orangeComponent text-color1 text-[14px] w-1/12 text-center">
-                    No
+                    ID.Member
                   </th>
                   <th className="bg-orangeComponent text-color1 text-[14px] w-2/12">
                     Nama Member
@@ -108,23 +111,29 @@ const ListMember = () => {
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)] text-[14px]">
                 <>
                   {customers.data?.map((data, index) => (
-                    <tr key={data.id}>
-                      <td className="text-center">{index + 1}</td>
+                    <tr key={index}>
+                      <td className="text-center">{data.id}</td>
                       <td>{data.name}</td>
                       <td className="text-center text-[14px]">
                         {data.address}
                       </td>
                       <td>{data.phone_number}</td>
-                      <td className="text-center">{data.email}</td>
+                      <td className="text-center">
+                        {data.email}
+                      </td>
                       <td className="flex justify-center gap-5">
                         <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
                           <FiEdit
                             className="w-5 h-5"
-                            onClick={() => navigate(`/editMember/${data.id}`)}
+                            onClick={() =>
+                              navigate(`/editMember/${data.id}`)
+                            }
                           />
                           <p
                             className="text-[14px] pt-1"
-                            onClick={() => navigate(`/editMember/${data.id}`)}
+                            onClick={() =>
+                              navigate(`/editMember/${data.id}`)
+                            }
                           >
                             Edit
                           </p>
@@ -143,6 +152,62 @@ const ListMember = () => {
 };
 
 const AddMember = () => {
+  const [isDisable, setIsDisable] = useState(true);
+  const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+  const [Members, setMembers] = useState({
+    id: 0,
+    name: "",
+    email: "",
+    phone_number: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    if (
+      Members.name === "" ||
+      Members.email === "" ||
+      Members.phone_number === "" ||
+      Members.address === ""
+    ) {
+      setIsDisable(true);
+    } else {
+      setIsDisable(false);
+    }
+  }, [Members]);
+
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    const formData: any = new FormData();
+
+    formData.append("name", Members.name);
+    formData.append("email", Members.email);
+    formData.append("phone_number", Members.phone_number);
+    formData.append("address", Members.address);
+
+    axios
+      .post(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/customers",
+        formData
+      )
+      .then((response) => {
+        Swal.fire({
+          title: "Berhasil",
+          text: response.data.message,
+          confirmButtonAriaLabel: "ok",
+        });
+        navigate("/listMember");
+      })
+      .catch((error) => {
+        MySwal.fire({
+          title: "Gagal",
+          text: error.response.data.message,
+          confirmButtonAriaLabel: "ok",
+        });
+      });
+  };
   return (
     <>
       <Layout>
@@ -157,7 +222,9 @@ const AddMember = () => {
                   <Link to="/listMember">
                     <CustomButton
                       id="btn-kembaliProfil"
-                      icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
+                      icon={
+                        <FaArrowCircleLeft className="mr-5 mt-1" />
+                      }
                       label="Kembali"
                       className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4 flex flex-row hover:rounded-xl"
                     />
@@ -168,65 +235,97 @@ const AddMember = () => {
                 <h1 className="text-4xl font-bold font-poppins mt-20 ">
                   Tambah Member Baru
                 </h1>
-                <div className="flex flex-row">
-                  <div className="flex-1 flex-col ">
-                    <div className="form-control w-full mt-16">
-                      <label className="label">
-                        <span className="label-text text-lg text-black">
-                          Nama Member :
-                        </span>
-                      </label>
-                      <CustomInput
-                        id="input-nama"
-                        type="text"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 "
-                      />
-                      <label className="label mt-8">
-                        <span className="label-text text-lg text-black">
-                          Email :
-                        </span>
-                      </label>
-                      <CustomInput
-                        id="input-nama"
-                        type="email"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 "
+                <form onSubmit={handleSubmit}>
+                  <div className="flex flex-row">
+                    <div className="flex-1 flex-col ">
+                      <div className="form-control w-full mt-16">
+                        <label className="label">
+                          <span className="label-text text-lg text-black">
+                            Nama Member :
+                          </span>
+                        </label>
+                        <CustomInput
+                          id="input-nama"
+                          type="text"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 "
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              name: e.target.value,
+                            })
+                          }
+                          value={Members.name}
+                        />
+                        <label className="label mt-8">
+                          <span className="label-text text-lg text-black">
+                            Email :
+                          </span>
+                        </label>
+                        <CustomInput
+                          id="input-nama"
+                          type="email"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 "
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              email: e.target.value,
+                            })
+                          }
+                          value={Members.email}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-1 flex-col ">
+                      {" "}
+                      <div className="form-control w-full mt-16">
+                        <label className="label">
+                          <span className="label-text text-lg text-black">
+                            No. Telepon:
+                          </span>
+                        </label>
+                        <CustomInput
+                          id="input-nama"
+                          type="text"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 "
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              phone_number: e.target.value,
+                            })
+                          }
+                          value={Members.phone_number}
+                        />
+                        <label className="label mt-8">
+                          <span className="label-text text-lg text-black">
+                            Alamat
+                          </span>
+                        </label>
+                        <textarea
+                          id="input-nama"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 h-[11rem]"
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              address: e.target.value,
+                            })
+                          }
+                          value={Members.address}
+                        ></textarea>
+                      </div>
+                      <CustomButton
+                        id="btn-perbaruiTenant"
+                        label="Tambah Member Baru"
+                        type="submit"
+                        disabled={isDisable}
+                        className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
                       />
                     </div>
                   </div>
-                  <div className="flex-1 flex-col ">
-                    {" "}
-                    <div className="form-control w-full mt-16">
-                      <label className="label">
-                        <span className="label-text text-lg text-black">
-                          No. Telepon:
-                        </span>
-                      </label>
-                      <CustomInput
-                        id="input-nama"
-                        type="text"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 "
-                      />
-                      <label className="label mt-8">
-                        <span className="label-text text-lg text-black">
-                          Alamat
-                        </span>
-                      </label>
-                      <textarea
-                        id="input-nama"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 h-[11rem]"
-                      ></textarea>
-                    </div>
-                    <CustomButton
-                      id="btn-perbaruiTenant"
-                      label="Tambah Member Baru"
-                      className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
-                    />
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -277,7 +376,9 @@ const EditMember = () => {
       .finally(() => setLoading(false));
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     setLoading(true);
     e.preventDefault();
     const formData = new FormData();
@@ -322,7 +423,10 @@ const EditMember = () => {
       .finally(() => setLoading(false));
   };
 
-  const handleChange = (value: string, key: keyof typeof objSubmit) => {
+  const handleChange = (
+    value: string,
+    key: keyof typeof objSubmit
+  ) => {
     let temp = { ...objSubmit };
     temp[key] = value;
     setObjSubmit(temp);
@@ -342,7 +446,9 @@ const EditMember = () => {
                   <Link to="/listMember">
                     <CustomButton
                       id="btn-kembaliProfil"
-                      icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
+                      icon={
+                        <FaArrowCircleLeft className="mr-5 mt-1" />
+                      }
                       label="Kembali"
                       className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4   flex flex-row hover:rounded-xl "
                     />
@@ -371,7 +477,9 @@ const EditMember = () => {
                         className="input input-bordered w-10/12 "
                         placeholder="Type here"
                         defaultValue={nama}
-                        onChange={(e) => handleChange(e.target.value, "name")}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "name")
+                        }
                       />
                       <label className="label mt-8">
                         <span className="label-text text-lg text-black">
@@ -384,7 +492,9 @@ const EditMember = () => {
                         className="input input-bordered w-10/12 "
                         placeholder="Type here"
                         defaultValue={email}
-                        onChange={(e) => handleChange(e.target.value, "email")}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "email")
+                        }
                       />
                     </div>
                   </div>
@@ -403,7 +513,10 @@ const EditMember = () => {
                         placeholder="Type here"
                         defaultValue={phone}
                         onChange={(e) =>
-                          handleChange(e.target.value, "phone_number")
+                          handleChange(
+                            e.target.value,
+                            "phone_number"
+                          )
                         }
                       />
                       <label className="label mt-8">
