@@ -13,11 +13,54 @@ import avatarIcon from "../assets/avatarIcon.webp";
 import SideNav from "../components/SideNav";
 import Layout from "../components/Layout";
 
-import { FaArrowCircleLeft, FaShoppingCart } from "react-icons/fa";
+import {
+  FaArrowCircleLeft,
+  FaShoppingCart,
+} from "react-icons/fa";
 import { TfiLocationPin } from "react-icons/tfi";
 import { IoCallOutline } from "react-icons/io5";
 
 function Profile() {
+  const [user, setUser] = useState<UserTypes>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [cookie, , removeCookie] = useCookies([
+    "token",
+    "id",
+    "business_name",
+    "email",
+  ]);
+  const checkToken = cookie.token;
+  const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/users",
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((user) => {
+        const { data } = user.data;
+        setUser(data);
+      })
+      .catch((err) => {
+        const { data } = err.response.data.message;
+        MySwal.fire({
+          title: "Error",
+          text: data,
+          showCancelButton: false,
+        });
+      })
+      .finally(() => setLoading(false));
+  }
+
   return (
     <Layout>
       <div className="flex flex-row">
@@ -29,7 +72,7 @@ function Profile() {
             <div className="flex flex-row h-[8rem] mt-10">
               <div className="flex-1 ">
                 <h1 className="text-2xl font-poppins text-black font-bold mt-7 ml-6 tracking-[0.2rem]">
-                  Selamat Datang, Aldo
+                  Selamat Datang, {user?.business_name}
                 </h1>
                 <p className=" text-gray-400 text-sm tracking-[0.2rem] ml-6">
                   Temukan, yang kamu butuhkan
@@ -37,20 +80,26 @@ function Profile() {
               </div>
             </div>
             <div className="tracking-[0.2rem] font-bold flex flex-col items-center text-center">
-              <img src={avatarIcon} alt="avatar" className="w-1/6" />
+              <img
+                src={avatarIcon}
+                alt="avatar"
+                className="w-1/6"
+              />
               <br />
-              <h1 className="text-color3 text-2xl">Warung saya</h1>
+              <h1 className="text-color3 text-2xl">
+                {user?.business_name}
+              </h1>
               <br />
-              <p className="text-color4">email</p>
+              <p className="text-color4">{user?.email}</p>
               <br />
               <div className="flex">
                 <TfiLocationPin className="w-7 h-7" />
-                <p>alamat</p>
+                <p>{user?.address}</p>
               </div>
               <br />
               <div className="flex">
                 <IoCallOutline className="w-7 h-7" />
-                <p>no</p>
+                <p>{user?.phone_number}</p>
               </div>
               <br />
               <div className="flex gap-12">
@@ -114,7 +163,9 @@ function EditProfile() {
       .finally(() => setLoading(false));
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     setLoading(true);
     e.preventDefault();
     const formData = new FormData();
@@ -159,7 +210,10 @@ function EditProfile() {
       .finally(() => setLoading(false));
   };
 
-  const handleChange = (value: string, key: keyof typeof objSubmit) => {
+  const handleChange = (
+    value: string,
+    key: keyof typeof objSubmit
+  ) => {
     let temp = { ...objSubmit };
     temp[key] = value;
     setObjSubmit(temp);
@@ -178,7 +232,9 @@ function EditProfile() {
                 <Link to="/profile">
                   <CustomButton
                     id="btn-kembaliProfil"
-                    icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
+                    icon={
+                      <FaArrowCircleLeft className="mr-5 mt-1" />
+                    }
                     label="Kembali"
                     className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4   flex flex-row hover:rounded-xl "
                   />
@@ -220,7 +276,10 @@ function EditProfile() {
               <h1 className="text-4xl font-bold font-poppins mt-20 ">
                 Edit Profile Tenant
               </h1>
-              <form className="flex flex-row" onSubmit={(e) => handleSubmit(e)}>
+              <form
+                className="flex flex-row"
+                onSubmit={(e) => handleSubmit(e)}
+              >
                 <div className="flex-1 flex-col ">
                   <div className="form-control w-full mt-16">
                     <label className="label">
@@ -235,7 +294,10 @@ function EditProfile() {
                       placeholder="Type here"
                       defaultValue={namaToko}
                       onChange={(e) =>
-                        handleChange(e.target.value, "business_name")
+                        handleChange(
+                          e.target.value,
+                          "business_name"
+                        )
                       }
                     />
                     <label className="label mt-8">
@@ -249,7 +311,9 @@ function EditProfile() {
                       className="input input-bordered w-10/12 "
                       placeholder="Type here"
                       defaultValue={email}
-                      onChange={(e) => handleChange(e.target.value, "email")}
+                      onChange={(e) =>
+                        handleChange(e.target.value, "email")
+                      }
                     />
                     <label className="label mt-8">
                       <span className="label-text text-lg text-black    ">
@@ -262,7 +326,9 @@ function EditProfile() {
                       className="input input-bordered w-10/12"
                       placeholder="Type here"
                       defaultValue={"************"}
-                      onChange={(e) => handleChange(e.target.value, "password")}
+                      onChange={(e) =>
+                        handleChange(e.target.value, "password")
+                      }
                     />
                   </div>
 
@@ -289,7 +355,10 @@ function EditProfile() {
                       placeholder="Type here"
                       defaultValue={telepon}
                       onChange={(e) =>
-                        handleChange(e.target.value, "phone_number")
+                        handleChange(
+                          e.target.value,
+                          "phone_number"
+                        )
                       }
                     />
                     <label className="label mt-8">
@@ -302,7 +371,9 @@ function EditProfile() {
                       className="input input-bordered w-10/12 h-[11rem]"
                       placeholder="Type here"
                       defaultValue={addres}
-                      onChange={(e) => handleChange(e.target.value, "address")}
+                      onChange={(e) =>
+                        handleChange(e.target.value, "address")
+                      }
                     ></textarea>
                   </div>
                 </div>
@@ -319,7 +390,11 @@ const CartDrawer = () => {
   return (
     <>
       <div className="drawer drawer-end">
-        <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
+        <input
+          id="my-drawer-4"
+          type="checkbox"
+          className="drawer-toggle"
+        />
         <div className="drawer-content">
           <label
             htmlFor="my-drawer-4"
@@ -329,7 +404,10 @@ const CartDrawer = () => {
           </label>
         </div>
         <div className="drawer-side">
-          <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
+          <label
+            htmlFor="my-drawer-4"
+            className="drawer-overlay"
+          ></label>
           <ul className="menu p-4 w-80 bg-base-100 text-base-content">
             <li>
               <a>Sidebar Item 1</a>
