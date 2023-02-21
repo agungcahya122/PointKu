@@ -1,12 +1,21 @@
-import Card from "../components/Card";
+import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
-import Layout from "../components/Layout";
-import SideNav from "../components/SideNav";
-import { FaShoppingCart } from "react-icons/fa";
-import { useState } from "react";
+import withReactContent from "sweetalert2-react-content";
+import { ProductsTypes } from "../utils/types/DataTypes";
+import Swal from "../utils/Swal";
 
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
+import LogoMie from "../assets/addProduct.svg";
+
 import CustomButton from "../components/CustomButton";
+import SideNav from "../components/SideNav";
+import Layout from "../components/Layout";
+import Card from "../components/Card";
+
+import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router";
 
 const Home = () => {
   return (
@@ -27,6 +36,36 @@ const Home = () => {
 };
 
 const Content = () => {
+  const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+  const MySwal = withReactContent(Swal);
+
+  const [products, setProducts] = useState<ProductsTypes>({});
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products`,
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+      .finally(() => setLoading(false));
+  }
+
   return (
     <>
       <div className="flex flex-col w-full">
@@ -64,30 +103,21 @@ const Content = () => {
                   className="input bg-slate-200  placeholder-black w-[65%]"
                 />
               </div>
-              <div></div>
             </div>
           </div>
         </div>
         <div className="w-full min-h-screen mt-10 ml-3">
           <div className="grid grid-cols-3 gap-2">
-            <div>
-              <Card />
-            </div>
-            <div>
-              <Card />
-            </div>
-            <div>
-              <Card />
-            </div>
-            <div className="mt-10">
-              <Card />
-            </div>
-            <div className="mt-10">
-              <Card />
-            </div>
-            <div className="mt-10">
-              <Card />
-            </div>
+            {products.data?.map((data, index) => (
+              <Card
+                key={data.id}
+                id={data.id}
+                product_name={data.product_name}
+                stock={data.stock}
+                price={data.price}
+                product_image={LogoMie}
+              />
+            ))}
           </div>
         </div>
         <CustomButton
@@ -146,14 +176,14 @@ const Keranjang = () => {
           <label className="label">
             <span className="label-text text-black">Metode Pembayaran</span>
           </label>
-          <select className="select select-bordered bg-bgCard text-black">
+          {/* <select className="select select-bordered bg-bgCard text-black">
             <option disabled selected>
               Pilih Salah Satu
             </option>
             <option>Tunai</option>
             <option>ATM / Bank Transfer</option>
             <option>QRIS</option>
-          </select>
+          </select> */}
         </div>
         <div className="mx-auto mt-10">
           <CustomButton
@@ -193,7 +223,7 @@ const CardKeranjang = () => {
               <CustomButton
                 id="btn-add"
                 label="+"
-                onClick={addProduct}
+                // onClick={addProduct}
                 className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
               />
               <p className=" text-md       text-black ">{count}</p>
@@ -201,7 +231,7 @@ const CardKeranjang = () => {
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={decProduct}
+                  // onClick={decProduct}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                   disabled
                 />
@@ -209,7 +239,7 @@ const CardKeranjang = () => {
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={decProduct}
+                  // onClick={decProduct}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                 />
               )}

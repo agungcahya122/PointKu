@@ -6,7 +6,6 @@ export interface UserTypes {
   address?: any;
 }
 
-
 export interface productData {
   id?: string;
   upc?: string;
@@ -31,6 +30,14 @@ export interface MemberIdTypes {
   phone_number?: string;
 }
 
+export interface ProductsTypes {
+  data?: ProductType[];
+}
+
+export interface MembersTypes {
+  data?: Member[];
+}
+
 type Member = {
   id?: number;
   email?: string;
@@ -39,3 +46,15 @@ type Member = {
   address?: string;
 };
 
+type ProductType = {
+  id?: number;
+  upc?: string;
+  category?: string;
+  product_name?: string;
+  minimum_stock?: number;
+  stock?: number;
+  buying_price?: number;
+  price?: number;
+  product_image?: string;
+  supplier?: string;
+};
