@@ -1,11 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
 import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
-import { Link } from "react-router-dom";
+
+import withReactContent from "sweetalert2-react-content";
+import {
+  MemberIdTypes,
+  MembersTypes,
+} from "../utils/types/DataTypes";
+import Swal from "../utils/Swal";
+
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
@@ -13,6 +23,33 @@ import { FaArrowCircleLeft } from "react-icons/fa";
 
 const ListMember = () => {
   const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [customers, setCustomers] = useState<MembersTypes>({});
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/customers",
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((res) => {
+        setCustomers(res.data);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+      .finally(() => setLoading(false));
+  }
 
   return (
     <Layout>
@@ -21,9 +58,9 @@ const ListMember = () => {
           <SideNav />
         </div>
         <div className="col-span-9 px-10 pt-16">
-          {/* <div className="flex justify-center ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
+          <div className="flex justify-center ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
             <MdOutlineShoppingCart className="w-6 h-6 text-color3" />
-          </div> */}
+          </div>
           <p className="text-[36px] text-color3 font-semibold tracking-widest mt-8">
             List Member
           </p>
@@ -51,7 +88,7 @@ const ListMember = () => {
               <thead className="">
                 <tr>
                   <th className="bg-orangeComponent text-color1 text-[14px] w-1/12 text-center">
-                    No
+                    ID.Member
                   </th>
                   <th className="bg-orangeComponent text-color1 text-[14px] w-2/12">
                     Nama Member
@@ -72,63 +109,39 @@ const ListMember = () => {
               </thead>
 
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)] text-[14px]">
-                <tr>
-                  <td className="text-center">1</td>
-                  <td>Rahma Aprillia Sari</td>
-                  <td className="text-center text-[14px]">
-                    Jl.Ampel no.12, RT/RW 001/003, Sukun, Malang
-                  </td>
-                  <td>089534568976</td>
-                  <td className="text-center">rahmaaprillia@gmail.com</td>
-                  <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                      <IoTrashOutline className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Hapus</p>
-                    </div>
-
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
-                      <FiEdit
-                        className="w-5 h-5"
-                        onClick={() => navigate("/editMember")}
-                      />
-                      <p
-                        className="text-[14px] pt-1"
-                        onClick={() => navigate("/editMember")}
-                      >
-                        Edit
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="text-center">2</td>
-                  <td>M Agung Cahya D</td>
-                  <td className="text-center text-[14px]">
-                    Jl.Nusantara no.03, RT/RW 001/003, Garum, Blitar
-                  </td>
-                  <td>089678985678</td>
-                  <td className="text-center">agungcahya@gmail.com</td>
-                  <td className="flex justify-center gap-5">
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                      <IoTrashOutline className="w-5 h-5" />
-                      <p className="text-[14px] pt-1">Hapus</p>
-                    </div>
-
-                    <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
-                      <FiEdit
-                        className="w-5 h-5"
-                        onClick={() => navigate("/editMember")}
-                      />
-                      <p
-                        className="text-[14px] pt-1"
-                        onClick={() => navigate("/editMember")}
-                      >
-                        Edit
-                      </p>
-                    </div>
-                  </td>
-                </tr>
+                <>
+                  {customers.data?.map((data, index) => (
+                    <tr key={index}>
+                      <td className="text-center">{data.id}</td>
+                      <td>{data.name}</td>
+                      <td className="text-center text-[14px]">
+                        {data.address}
+                      </td>
+                      <td>{data.phone_number}</td>
+                      <td className="text-center">
+                        {data.email}
+                      </td>
+                      <td className="flex justify-center gap-5">
+                        <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
+                          <FiEdit
+                            className="w-5 h-5"
+                            onClick={() =>
+                              navigate(`/editMember/${data.id}`)
+                            }
+                          />
+                          <p
+                            className="text-[14px] pt-1"
+                            onClick={() =>
+                              navigate(`/editMember/${data.id}`)
+                            }
+                          >
+                            Edit
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </>
               </tbody>
             </table>
           </div>
@@ -139,6 +152,62 @@ const ListMember = () => {
 };
 
 const AddMember = () => {
+  const [isDisable, setIsDisable] = useState(true);
+  const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+  const [Members, setMembers] = useState({
+    id: 0,
+    name: "",
+    email: "",
+    phone_number: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    if (
+      Members.name === "" ||
+      Members.email === "" ||
+      Members.phone_number === "" ||
+      Members.address === ""
+    ) {
+      setIsDisable(true);
+    } else {
+      setIsDisable(false);
+    }
+  }, [Members]);
+
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    const formData: any = new FormData();
+
+    formData.append("name", Members.name);
+    formData.append("email", Members.email);
+    formData.append("phone_number", Members.phone_number);
+    formData.append("address", Members.address);
+
+    axios
+      .post(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/customers",
+        formData
+      )
+      .then((response) => {
+        Swal.fire({
+          title: "Berhasil",
+          text: response.data.message,
+          confirmButtonAriaLabel: "ok",
+        });
+        navigate("/listMember");
+      })
+      .catch((error) => {
+        MySwal.fire({
+          title: "Gagal",
+          text: error.response.data.message,
+          confirmButtonAriaLabel: "ok",
+        });
+      });
+  };
   return (
     <>
       <Layout>
@@ -153,7 +222,9 @@ const AddMember = () => {
                   <Link to="/listMember">
                     <CustomButton
                       id="btn-kembaliProfil"
-                      icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
+                      icon={
+                        <FaArrowCircleLeft className="mr-5 mt-1" />
+                      }
                       label="Kembali"
                       className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4 flex flex-row hover:rounded-xl"
                     />
@@ -164,65 +235,97 @@ const AddMember = () => {
                 <h1 className="text-4xl font-bold font-poppins mt-20 ">
                   Tambah Member Baru
                 </h1>
-                <div className="flex flex-row">
-                  <div className="flex-1 flex-col ">
-                    <div className="form-control w-full mt-16">
-                      <label className="label">
-                        <span className="label-text text-lg text-black">
-                          Nama Member :
-                        </span>
-                      </label>
-                      <CustomInput
-                        id="input-nama"
-                        type="text"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 "
-                      />
-                      <label className="label mt-8">
-                        <span className="label-text text-lg text-black">
-                          Email :
-                        </span>
-                      </label>
-                      <CustomInput
-                        id="input-nama"
-                        type="email"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 "
+                <form onSubmit={handleSubmit}>
+                  <div className="flex flex-row">
+                    <div className="flex-1 flex-col ">
+                      <div className="form-control w-full mt-16">
+                        <label className="label">
+                          <span className="label-text text-lg text-black">
+                            Nama Member :
+                          </span>
+                        </label>
+                        <CustomInput
+                          id="input-nama"
+                          type="text"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 "
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              name: e.target.value,
+                            })
+                          }
+                          value={Members.name}
+                        />
+                        <label className="label mt-8">
+                          <span className="label-text text-lg text-black">
+                            Email :
+                          </span>
+                        </label>
+                        <CustomInput
+                          id="input-nama"
+                          type="email"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 "
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              email: e.target.value,
+                            })
+                          }
+                          value={Members.email}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-1 flex-col ">
+                      {" "}
+                      <div className="form-control w-full mt-16">
+                        <label className="label">
+                          <span className="label-text text-lg text-black">
+                            No. Telepon:
+                          </span>
+                        </label>
+                        <CustomInput
+                          id="input-nama"
+                          type="text"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 "
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              phone_number: e.target.value,
+                            })
+                          }
+                          value={Members.phone_number}
+                        />
+                        <label className="label mt-8">
+                          <span className="label-text text-lg text-black">
+                            Alamat
+                          </span>
+                        </label>
+                        <textarea
+                          id="input-nama"
+                          placeholder="Type here"
+                          className="input input-bordered w-10/12 h-[11rem]"
+                          onChange={(e) =>
+                            setMembers({
+                              ...Members,
+                              address: e.target.value,
+                            })
+                          }
+                          value={Members.address}
+                        ></textarea>
+                      </div>
+                      <CustomButton
+                        id="btn-perbaruiTenant"
+                        label="Tambah Member Baru"
+                        type="submit"
+                        disabled={isDisable}
+                        className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
                       />
                     </div>
                   </div>
-                  <div className="flex-1 flex-col ">
-                    {" "}
-                    <div className="form-control w-full mt-16">
-                      <label className="label">
-                        <span className="label-text text-lg text-black">
-                          No. Telepon:
-                        </span>
-                      </label>
-                      <CustomInput
-                        id="input-nama"
-                        type="text"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 "
-                      />
-                      <label className="label mt-8">
-                        <span className="label-text text-lg text-black">
-                          Alamat
-                        </span>
-                      </label>
-                      <textarea
-                        id="input-nama"
-                        placeholder="Type here"
-                        className="input input-bordered w-10/12 h-[11rem]"
-                      ></textarea>
-                    </div>
-                    <CustomButton
-                      id="btn-perbaruiTenant"
-                      label="Tambah Member Baru"
-                      className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
-                    />
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -233,6 +336,102 @@ const AddMember = () => {
 };
 
 const EditMember = () => {
+  const navigate = useNavigate();
+  const { customer_id } = useParams();
+  const MySwal = withReactContent(Swal);
+  const [cookies, setCookies] = useCookies(["token"]);
+  const checkToken = cookies.token;
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [objSubmit, setObjSubmit] = useState<MemberIdTypes>({});
+  const [nama, setNama] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/cutomers/${customer_id}`,
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        setNama(data.name);
+        setPhone(data.phone_number);
+        setAddress(data.address);
+        setEmail(data.email);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      })
+      .finally(() => setLoading(false));
+  }
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setLoading(true);
+    e.preventDefault();
+    const formData = new FormData();
+    let key: keyof typeof objSubmit;
+    for (key in objSubmit) {
+      formData.append(key, objSubmit[key]);
+    }
+
+    axios
+      .put(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/cutomers/${customer_id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${checkToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        const { message } = res.data;
+
+        MySwal.fire({
+          title: "Edit Succes",
+          text: message,
+          showCancelButton: false,
+          confirmButtonText: "Oke",
+        }).then(() => {
+          navigate("/listMember");
+        });
+        setObjSubmit({});
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        MySwal.fire({
+          title: "Edit Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
+      })
+      .finally(() => fetchData())
+      .finally(() => setLoading(false));
+  };
+
+  const handleChange = (
+    value: string,
+    key: keyof typeof objSubmit
+  ) => {
+    let temp = { ...objSubmit };
+    temp[key] = value;
+    setObjSubmit(temp);
+  };
+
   return (
     <>
       <Layout>
@@ -247,7 +446,9 @@ const EditMember = () => {
                   <Link to="/listMember">
                     <CustomButton
                       id="btn-kembaliProfil"
-                      icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
+                      icon={
+                        <FaArrowCircleLeft className="mr-5 mt-1" />
+                      }
                       label="Kembali"
                       className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4   flex flex-row hover:rounded-xl "
                     />
@@ -258,7 +459,11 @@ const EditMember = () => {
                 <h1 className="text-4xl font-bold font-poppins mt-20 ">
                   Edit Member PointKu
                 </h1>
-                <div className="flex flex-row">
+
+                <form
+                  className="flex flex-row"
+                  onSubmit={(e) => handleSubmit(e)}
+                >
                   <div className="flex-1 flex-col ">
                     <div className="form-control w-full mt-16">
                       <label className="label">
@@ -269,8 +474,12 @@ const EditMember = () => {
                       <CustomInput
                         id="input-nama"
                         type="text"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 "
+                        placeholder="Type here"
+                        defaultValue={nama}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "name")
+                        }
                       />
                       <label className="label mt-8">
                         <span className="label-text text-lg text-black">
@@ -280,8 +489,12 @@ const EditMember = () => {
                       <CustomInput
                         id="input-nama"
                         type="email"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 "
+                        placeholder="Type here"
+                        defaultValue={email}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "email")
+                        }
                       />
                     </div>
                   </div>
@@ -296,8 +509,15 @@ const EditMember = () => {
                       <CustomInput
                         id="input-nama"
                         type="text"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 "
+                        placeholder="Type here"
+                        defaultValue={phone}
+                        onChange={(e) =>
+                          handleChange(
+                            e.target.value,
+                            "phone_number"
+                          )
+                        }
                       />
                       <label className="label mt-8">
                         <span className="label-text text-lg text-black">
@@ -306,17 +526,22 @@ const EditMember = () => {
                       </label>
                       <textarea
                         id="input-nama"
-                        placeholder="Type here"
                         className="input input-bordered w-10/12 h-[11rem]"
+                        placeholder="Type here"
+                        defaultValue={address}
+                        onChange={(e) =>
+                          handleChange(e.target.value, "address")
+                        }
                       ></textarea>
                     </div>
                     <CustomButton
                       id="btn-perbaruiTenant"
                       label="Perbarui Data Member"
-                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
+                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-color3"
+                      loading={loading}
                     />
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>

@@ -18,6 +18,45 @@ import { TfiLocationPin } from "react-icons/tfi";
 import { IoCallOutline } from "react-icons/io5";
 
 function Profile() {
+  const [user, setUser] = useState<UserTypes>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [cookie, , removeCookie] = useCookies([
+    "token",
+    "id",
+    "business_name",
+    "email",
+  ]);
+  const checkToken = cookie.token;
+  const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(
+        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/users",
+        {
+          headers: { Authorization: `Bearer ${checkToken}` },
+        }
+      )
+      .then((user) => {
+        const { data } = user.data;
+        setUser(data);
+      })
+      .catch((err) => {
+        MySwal.fire({
+          title: "Error",
+          text: err.response.data.message,
+          showCancelButton: false,
+        });
+      })
+      .finally(() => setLoading(false));
+  }
+
   return (
     <Layout>
       <div className="flex flex-row">
@@ -29,7 +68,7 @@ function Profile() {
             <div className="flex flex-row h-[8rem] mt-10">
               <div className="flex-1 ">
                 <h1 className="text-2xl font-poppins text-black font-bold mt-7 ml-6 tracking-[0.2rem]">
-                  Selamat Datang, Aldo
+                  Selamat Datang, {user?.business_name}
                 </h1>
                 <p className=" text-gray-400 text-sm tracking-[0.2rem] ml-6">
                   Temukan, yang kamu butuhkan
@@ -39,18 +78,18 @@ function Profile() {
             <div className="tracking-[0.2rem] font-bold flex flex-col items-center text-center">
               <img src={avatarIcon} alt="avatar" className="w-1/6" />
               <br />
-              <h1 className="text-color3 text-2xl">Warung saya</h1>
+              <h1 className="text-color3 text-2xl">{user?.business_name}</h1>
               <br />
-              <p className="text-color4">email</p>
+              <p className="text-color4">{user?.email}</p>
               <br />
               <div className="flex">
                 <TfiLocationPin className="w-7 h-7" />
-                <p>alamat</p>
+                <p>{user?.address}</p>
               </div>
               <br />
               <div className="flex">
                 <IoCallOutline className="w-7 h-7" />
-                <p>no</p>
+                <p>{user?.phone_number}</p>
               </div>
               <br />
               <div className="flex gap-12">
