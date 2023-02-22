@@ -21,7 +21,7 @@ import {
 } from "../pages/ListMember";
 import useCookies from "react-cookie/cjs/useCookies";
 
-import Report from "../pages/Report";
+import { Report } from "../pages/Report";
 import DetailTransaksi from "../pages/DetailTransaksi";
 import axios from "axios";
 
