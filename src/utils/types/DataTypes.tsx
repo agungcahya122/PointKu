@@ -46,7 +46,6 @@ type Member = {
   address?: string;
 };
 
-
 export interface transactionsReports {
   id?: string;
   customer_id?: number;
@@ -56,6 +55,7 @@ export interface transactionsReports {
   phone_number?: string;
   total_bill?: number;
   transaction_status?: string;
+}
 
 type ProductType = {
   id?: number;
@@ -92,5 +92,4 @@ export interface transactionType {
       total_price: number;
     }
   ];
-
 }
