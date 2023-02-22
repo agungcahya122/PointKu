@@ -30,6 +30,14 @@ export interface MemberIdTypes {
   phone_number?: string;
 }
 
+export interface ProductsTypes {
+  data?: ProductType[];
+}
+
+export interface MembersTypes {
+  data?: Member[];
+}
+
 type Member = {
   id?: number;
   email?: string;
@@ -37,6 +45,7 @@ type Member = {
   phone_number?: string;
   address?: string;
 };
+
 
 export interface transactionsReports {
   id?: string;
@@ -47,4 +56,41 @@ export interface transactionsReports {
   phone_number?: string;
   total_bill?: number;
   transaction_status?: string;
+
+type ProductType = {
+  id?: number;
+  upc?: string;
+  category?: string;
+  product_name?: string;
+  minimum_stock?: number;
+  stock?: number;
+  buying_price?: number;
+  price?: number;
+  product_image?: string;
+  supplier?: string;
+};
+export interface transactionType {
+  created_at: string;
+  customer_id: number;
+  customer_name: string;
+  discount: number;
+  id: number;
+  invoice_number: string;
+  invoice_url: string;
+  payment_url: string;
+  total_bill: number;
+  total_price: number;
+  transaction_Status: string;
+  transaction_status: string;
+  TransactionProductRes: [
+    {
+      price: number;
+      product_id: number;
+      product_image: string;
+      product_name: string;
+      quantity: number;
+      total_price: number;
+    }
+  ];
+
 }
