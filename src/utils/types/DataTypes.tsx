@@ -42,7 +42,7 @@ export interface transactionsReports {
   id?: string;
   customer_id?: number;
   customer_name?: string;
-  created_at?: string;
+  created_at?: any;
   invoice_number?: string;
   phone_number?: string;
   total_bill?: number;

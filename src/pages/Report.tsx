@@ -67,21 +67,20 @@ const LaporanPenjualan = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  useEffect(() => {
-    const matchingDates = reports.every((iten) => {
+  const handleDateData = () => {
+    const matchingDates = reports.every((item) => {
+      const date = new Date(item.created_at).toLocaleDateString();
+      console.log(date);
       const start = new Date(startDate).toLocaleDateString();
       const end = new Date(endDate).toLocaleDateString();
-      return startDate >= start && endDate <= end;
+
+      return date.includes(start) === true && date.includes(end) === true;
     });
 
-    if (startDate && endDate && !matchingDates) {
-      fetchData();
-    }
-  }, [startDate, endDate]);
-
-  const handleDateData = () => {
-    if (startDate && endDate) {
-      fetchData();
+    if (startDate && endDate && matchingDates) {
+      return fetchData();
+    } else {
+      return "Data Kosong";
     }
   };
 
@@ -99,6 +98,7 @@ const LaporanPenjualan = () => {
       .then((res) => {
         const { data } = res.data;
         setReports(data);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -145,7 +145,6 @@ const LaporanPenjualan = () => {
             <CustomButton
               id="btn-printLaporan"
               label="Tampilkan Data"
-              icon={<BsPrinter className="w-[1.3rem] h-[1.3rem] mr-3" />}
               className="btn bg-orangeComponent border-none rounded-xl"
               onClick={handleDateData}
             />
@@ -183,36 +182,28 @@ const LaporanPenjualan = () => {
                 </thead>
 
                 <tbody className="border-x-2 border-[rgba(159,159,159,0.2)] text-[14px]">
-                  {reports
-                    ?.filter((item) => {
-                      if (startDate || endDate) {
-                        return item;
-                      } else {
-                        return null;
-                      }
-                    })
-                    .map((item, index) => {
-                      return (
-                        <>
-                          <tr key={index}>
-                            <td className="text-center">
-                              {item.created_at?.split("").splice(0, 10)}
-                            </td>
-                            <td>{item.customer_name}</td>
-                            <td className="text-center text-[14px]">
-                              {item.invoice_number}/
-                              {item.created_at?.split("").splice(0, 10)}/MPL/
-                              {item.customer_id}
-                            </td>
-                            <td>089767765455</td>
-                            <td className="text-center">{item.total_bill}</td>
-                            <td className="flex justify-center gap-5">
-                              {item.transaction_status}
-                            </td>
-                          </tr>
-                        </>
-                      );
-                    })}
+                  {reports.map((item, index) => {
+                    return (
+                      <>
+                        <tr key={index}>
+                          <td className="text-center">
+                            {item.created_at?.split("").splice(0, 10)}
+                          </td>
+                          <td>{item.customer_name}</td>
+                          <td className="text-center text-[14px]">
+                            {item.invoice_number}/
+                            {item.created_at?.split("").splice(0, 10)}/MPL/
+                            {item.customer_id}
+                          </td>
+                          <td>089767765455</td>
+                          <td className="text-center">{item.total_bill}</td>
+                          <td className="flex justify-center gap-5">
+                            {item.transaction_status}
+                          </td>
+                        </tr>
+                      </>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
