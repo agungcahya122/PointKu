@@ -15,7 +15,7 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 import { FaShoppingCart } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -43,6 +43,7 @@ const Content = () => {
 
   const [products, setProducts] = useState<ProductsTypes>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -66,6 +67,14 @@ const Content = () => {
       .finally(() => setLoading(false));
   }
 
+  function filterProducts() {
+    return products.data?.filter((product) => {
+      return product.product_name
+        .toLowerCase()
+        .includes(searchKeyword.toLowerCase());
+    });
+  }
+
   return (
     <>
       <div className="flex flex-col w-full">
@@ -81,7 +90,10 @@ const Content = () => {
           <div className="flex-1">
             <div className="form-control ">
               <div className="input-group mt-10 ml-10">
-                <button className="px-4 py-3 bg-slate-200 hover:bg-slate-300 ">
+                <button
+                  className="px-4 py-3 bg-slate-200 hover:bg-slate-300 "
+                  onClick={() => fetchData()}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6 text-black "
@@ -101,6 +113,10 @@ const Content = () => {
                   type="text"
                   placeholder="Pencarian..."
                   className="input bg-slate-200  placeholder-black w-[65%]"
+                  value={searchKeyword}
+                  onChange={(e) =>
+                    setSearchKeyword(e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -108,7 +124,7 @@ const Content = () => {
         </div>
         <div className="w-full min-h-screen mt-10 ml-3">
           <div className="grid grid-cols-3 gap-2">
-            {products.data?.map((data, index) => (
+            {filterProducts()?.map((data, index) => (
               <Card
                 key={data.id}
                 id={data.id}
@@ -152,7 +168,9 @@ const Keranjang = () => {
               placeholder="ID. Member"
               className="input input-bordered border-1 bg-white w-6/12 "
             />
-            <span className="bg-orangeComponent text-white">Member</span>
+            <span className="bg-orangeComponent text-white">
+              Member
+            </span>
           </label>
         </div>
         <div className="w-11/12 h-[15rem] bg-gray-200 mx-auto rounded-xl mt-10 flex flex-row">
@@ -161,20 +179,32 @@ const Keranjang = () => {
             <h1 className="ml-6 text-md mt-2">Diskon</h1>
             <h1 className="ml-6 text-md mt-2">Total Pajak</h1>
             <hr className="w-10/12 border-2 border-slate-400 float-right mt-2" />
-            <h1 className="ml-6 text-md mt-6 font-bold ">Total Jumlah</h1>
+            <h1 className="ml-6 text-md mt-6 font-bold ">
+              Total Jumlah
+            </h1>
           </div>
           <div className="flex-1">
-            <h1 className="ml-16 text-md mt-9 text-black font-semibold">$20</h1>
-            <h1 className="ml-16 text-md mt-2 text-black font-semibold">-$5</h1>
-            <h1 className="ml-16 text-md mt-2 text-black font-semibold">-$5</h1>
+            <h1 className="ml-16 text-md mt-9 text-black font-semibold">
+              $20
+            </h1>
+            <h1 className="ml-16 text-md mt-2 text-black font-semibold">
+              -$5
+            </h1>
+            <h1 className="ml-16 text-md mt-2 text-black font-semibold">
+              -$5
+            </h1>
             <hr className="w-10/12 border-2  border-slate-400 float-left mt-2" />
-            <h1 className="ml-16 text-md mt-6 text-black font-bold">$10</h1>
+            <h1 className="ml-16 text-md mt-6 text-black font-bold">
+              $10
+            </h1>
           </div>
         </div>
 
         <div className="form-control w-10/12 mx-auto mt-10">
           <label className="label">
-            <span className="label-text text-black">Metode Pembayaran</span>
+            <span className="label-text text-black">
+              Metode Pembayaran
+            </span>
           </label>
           {/* <select className="select select-bordered bg-bgCard text-black">
             <option disabled selected>
@@ -226,7 +256,9 @@ const CardKeranjang = () => {
                 // onClick={addProduct}
                 className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
               />
-              <p className=" text-md       text-black ">{count}</p>
+              <p className=" text-md       text-black ">
+                {count}
+              </p>
               {count === 1 ? (
                 <CustomButton
                   id="btn-add"
