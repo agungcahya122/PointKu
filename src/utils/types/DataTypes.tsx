@@ -6,7 +6,6 @@ export interface UserTypes {
   address?: any;
 }
 
-
 export interface productData {
   id?: string;
   upc?: string;
@@ -39,3 +38,13 @@ type Member = {
   address?: string;
 };
 
+export interface transactionsReports {
+  id?: string;
+  customer_id?: number;
+  customer_name?: string;
+  created_at?: string;
+  invoice_number?: string;
+  phone_number?: string;
+  total_bill?: number;
+  transaction_status?: string;
+}
