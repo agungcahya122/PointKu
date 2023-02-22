@@ -14,11 +14,7 @@ import { Profile, EditProfile } from "../pages/Profile";
 
 import AddProduct from "../pages/AddProduct";
 import EditProduct from "../pages/EditProduct";
-import {
-  AddMember,
-  EditMember,
-  ListMember,
-} from "../pages/ListMember";
+import { AddMember, EditMember, ListMember } from "../pages/ListMember";
 import useCookies from "react-cookie/cjs/useCookies";
 
 import { Report } from "../pages/Report";
@@ -38,17 +34,14 @@ function App() {
   });
 
   useEffect(() => {
-    const data = JSON.parse(
-      localStorage.getItem("token") || "{}"
-    );
+    const data = JSON.parse(localStorage.getItem("token") || "{}");
     setResponseToken(data);
   }, []);
 
   const router = createBrowserRouter([
     {
       path: "/home",
-      element:
-        checkToken && responseToken ? <Home /> : <Login />,
+      element: checkToken && responseToken ? <Home /> : <Login />,
     },
     {
       path: "/register",
@@ -76,11 +69,7 @@ function App() {
     },
     {
       path: "/editProfile",
-      element: checkToken ? (
-        <EditProfile />
-      ) : (
-        <Navigate to={"/"} />
-      ),
+      element: checkToken ? <EditProfile /> : <Navigate to={"/"} />,
     },
     {
       path: "/listMember",
