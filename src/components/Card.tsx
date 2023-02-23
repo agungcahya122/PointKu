@@ -16,6 +16,8 @@ interface CardProps {
   price?: number;
   product_image?: string;
   supplier?: string;
+  qty?: number;
+  onClickCart?: () => void;
 }
 
 const Card: FC<CardProps> = ({
@@ -24,14 +26,9 @@ const Card: FC<CardProps> = ({
   stock,
   price,
   product_image,
+  qty,
+  onClickCart,
 }) => {
-  const [cookies, setCookies] = useCookies(["token"]);
-  const checkToken = cookies.token;
-
-  function onClickCart() {
-    console.log("add to cart");
-  }
-
   return (
     <>
       <div className="card w-11/12 bg-bgCard ">
@@ -53,10 +50,12 @@ const Card: FC<CardProps> = ({
             <CustomButton
               id="btn-card"
               label="Tambah ke Keranjang"
-              className="px-8 rounded-xl text-white py-3 bg-orangeComponent mt-4 hover:bg-orange-900 "
+              className="px-8 rounded-xl text-white py-3 bg-orangeComponent mt-4 hover:bg-orange-900"
+              onClick={onClickCart}
             />
           </div>
           <p className="text-lg text-slate-400 mt-4 font-semibold">{`Stok : ${stock}`}</p>
+          <p>{qty}</p>
         </div>
       </div>
     </>
