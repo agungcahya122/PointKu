@@ -47,7 +47,7 @@ const Login = () => {
       .then((res) => {
         const { data, message } = res.data;
         localStorage.setItem("token", JSON.stringify(data.token));
-        setCookie("token", res.data.token, { path: "/" });
+        setCookie("token", res.data.data.token, { path: "/" });
 
         dispatch(handleAuth(true));
 
@@ -57,10 +57,6 @@ const Login = () => {
           showCancelButton: false,
         });
         navigate("/home");
-
-        if (!loading) {
-          navigate("/home");
-        }
       })
       .catch((err) => {
         console.log(err);

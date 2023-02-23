@@ -1,28 +1,32 @@
 import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+
+import withReactContent from "sweetalert2-react-content";
+import { productData, ProductsTypes } from "../utils/types/DataTypes";
+import Swal from "../utils/Swal";
 
 import { InputIcon } from "../components/CustomInput";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
-import { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
-import { productData } from "../utils/types/DataTypes";
-import axios from "axios";
-import withReactContent from "sweetalert2-react-content";
-import Swal from "../utils/Swal";
 
 const MySwal = withReactContent(Swal);
 
 const ListProduct = () => {
+  const { product_id } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<productData[]>([]);
   const [cookie, removeCookie] = useCookies(["token"]);
   const checkToken = cookie.token;
-  const { product_id } = useParams();
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<ProductsTypes[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [filter, setFilter] = useState<ProductsTypes[]>([]);
 
   function onClickEdit() {
     navigate(`/editProduct/${product_id}`);
@@ -53,7 +57,7 @@ const ListProduct = () => {
     fetchData();
   }, []);
 
-  const handleDeleteProduct = async (data: productData[]) => {
+  const handleDeleteProduct = async (data: ProductsTypes[]) => {
     axios
       .delete(
         `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products/${product_id}`,
@@ -61,7 +65,6 @@ const ListProduct = () => {
           headers: {
             Authorization: `Bearer ${checkToken}`,
           },
-          params: {},
         }
       )
       .then((res) => {
@@ -79,6 +82,18 @@ const ListProduct = () => {
         console.log(err);
       });
   };
+
+  const filterList = useCallback(() => {
+    const filtered = data.filter((item) =>
+      item.product_name.toLocaleLowerCase().includes(search.toLowerCase())
+    );
+    setFilter(filtered);
+  }, [data, search]);
+
+  useEffect(() => {
+    filterList();
+  }, [filterList]);
+
   return (
     <Layout>
       <div className="grid grid-cols-12">
@@ -100,6 +115,7 @@ const ListProduct = () => {
                 type="search"
                 placeholder="Mencari Produk . . . . . ."
                 className="input input-border w-full max-w-full h-8 px-3 rounded-full placeholder-color3 bg-[#F8F5F5] text-color3 text-[16px] tracking-wider font-medium"
+                onChange={(e) => setSearch(e.target.value)}
               />
               <MdSearch className="w-8 h-8 text-color3" />
             </div>
@@ -136,38 +152,81 @@ const ListProduct = () => {
                 </tr>
               </thead>
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)]">
-                {data?.map((item, index) => (
-                  <>
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{item.product_name}</td>
-                      <td>{item.category}</td>
-                      <td>{item.price}</td>
-                      <td>{item.stock}</td>
-                      <td className="flex justify-center gap-5">
-                        <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
-                          <IoTrashOutline
-                            className="w-5 h-5"
-                            onClick={() => handleDeleteProduct(data)}
-                          />
-                          <p
-                            className="text-[14px] pt-1"
-                            onClick={() => handleDeleteProduct(data)}
-                          >
-                            Hapus
-                          </p>
-                        </div>
+                <>
+                  {search !== ""
+                    ? filter.map((item, index) => (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td>{item.product_name}</td>
+                          <td>{item.category}</td>
+                          <td>{item.price}</td>
+                          <td>{item.stock}</td>
+                          <td className="flex justify-center gap-5">
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
+                              <IoTrashOutline
+                                className="w-5 h-5"
+                                onClick={() => handleDeleteProduct(data)}
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={() => handleDeleteProduct(data)}
+                              >
+                                Hapus
+                              </p>
+                            </div>
 
-                        <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
-                          <FiEdit className="w-5 h-5" onClick={onClickEdit} />
-                          <p className="text-[14px] pt-1" onClick={onClickEdit}>
-                            Edit
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  </>
-                ))}
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
+                              <FiEdit
+                                className="w-5 h-5"
+                                onClick={onClickEdit}
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={onClickEdit}
+                              >
+                                Edit
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    : data.map((item, index) => (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td>{item.product_name}</td>
+                          <td>{item.category}</td>
+                          <td>{item.price}</td>
+                          <td>{item.stock}</td>
+                          <td className="flex justify-center gap-5">
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
+                              <IoTrashOutline
+                                className="w-5 h-5"
+                                onClick={() => handleDeleteProduct(data)}
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={() => handleDeleteProduct(data)}
+                              >
+                                Hapus
+                              </p>
+                            </div>
+
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
+                              <FiEdit
+                                className="w-5 h-5"
+                                onClick={onClickEdit}
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={onClickEdit}
+                              >
+                                Edit
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                </>
               </tbody>
             </table>
           </div>
