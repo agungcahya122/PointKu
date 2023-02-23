@@ -15,7 +15,7 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 import { FaShoppingCart } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface CartProps {
   id?: number;
@@ -24,6 +24,7 @@ interface CartProps {
   qty?: number;
   AddProduct?: () => void;
   DecProduct?: () => void;
+  DelProduct?: () => void;
 }
 
 const Home = () => {
@@ -32,6 +33,7 @@ const Home = () => {
   const checkToken = cookies.token;
   const MySwal = withReactContent(Swal);
 
+  const [subPrice, setSubPrice] = useState(0);
   const [products, setProducts] = useState<ProductsTypes[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -41,6 +43,7 @@ const Home = () => {
     discount: 0,
     total: 0,
   });
+  const [memberId, setMemberId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -68,7 +71,6 @@ const Home = () => {
   const [cart, setCart] = useState<ProductsTypes[]>([]);
 
   const handleCart = (data: ProductsTypes) => {
-    // console.log(data);
     let isPresent = false;
     cart.forEach((item) => {
       if (data.id === item.id) {
@@ -90,53 +92,34 @@ const Home = () => {
   for (const item of cart) {
     item.qty = 1;
   }
+  const checkMemberId = () => {
+    axios
+      .get(
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/customers`
+      )
+      .then((res) => {
+        const foundCustomer = res.data.data.find(
+          (customer: { id: number }) => customer.id === memberId
+        );
+        if (foundCustomer) {
+          setSummary((prevSummary) => ({
+            ...prevSummary,
+            discount: 1000,
+          }));
+        }
+      })
+      .catch((err) => {
+        alert(err.toString());
+      });
+  };
 
-  // console.log(cart);
-
-  // function handleCart(data: ProductsTypes) {
-  //   const checkExist = localStorage.getItem("AddtoCart");
-  //   if (checkExist) {
-  //     let parseCart: ProductsTypes[] = JSON.parse(checkExist);
-  //     parseCart.push(data);
-  //     localStorage.setItem("AddtoCart", JSON.stringify(parseCart));
-  //     // console.log(parseCart);
-  //   } else {
-  //     localStorage.setItem("AddtoCart", JSON.stringify([data]));
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchCart();
-  // }, []);
-
-  // const fetchCart = useCallback(() => {
-  //   setLoading(true);
-  //   const getProduct = localStorage.getItem("AddtoCart");
-  //   if (getProduct) {
-  //     setProducts(JSON.parse(getProduct));
-  //   }
-  //   setLoading(false);
-  // }, []);
-
-  // function addProduct() {
-  //   setCount((prevState) => prevState + 1);
-  // }
-
-  // function decProduct() {
-  //   setCount((count) => count - 1);
-  // }
-
-  // function addProduct(index: number) {
-  //   count[index] = count[index]++;
-  //   // setCount(count[index]);
-  // }
-
-  // function decProduct(index: number) {
-  //   count[index] = count[index]--;
-  //   // setCount((count) => count - 1);
-  // }
-
-  const [subPrice, setSubPrice] = useState(0);
+  useEffect(() => {
+    const totalPrice = subPrice - summary.discount;
+    setSummary((prevSummary) => ({
+      ...prevSummary,
+      total: totalPrice,
+    }));
+  }, [subPrice, summary.discount]);
 
   const handlePrice = () => {
     let ans = 0;
@@ -144,6 +127,15 @@ const Home = () => {
       ans += item.qty * item.price;
     });
     setSubPrice(ans);
+  };
+
+  useEffect(() => {
+    handlePrice();
+  });
+
+  const handleRemove = (id: number) => {
+    const arr = cart.filter((item) => item.id !== id);
+    setCart(arr);
   };
 
   return (
@@ -158,14 +150,11 @@ const Home = () => {
             <div className="flex flex-row h-[8rem] mt-10">
               <div className="flex-1 ">
                 <h1 className="text-2xl font-poppins text-black font-bold mt-7 ml-8">
-                  Selamat Datang, Aldo
+                  Selamat Datang,
                 </h1>
                 <p className="mt-3 text-gray-400 text-lg ml-8">
                   Temukan, yang kamu butuhkan
                 </p>
-                {cart?.map((item, index) => (
-                  <p key={index}>{item.price * item.qty}</p>
-                ))}
               </div>
               <div className="flex-1">
                 <div className="form-control ">
@@ -243,10 +232,13 @@ const Home = () => {
                         price={data.price}
                         qty={data.qty}
                         AddProduct={() => {
-                          // addProduct();
+                          // handleAdd();
                         }}
                         DecProduct={() => {
-                          // decProduct();
+                          // handleDec();
+                        }}
+                        DelProduct={() => {
+                          handleRemove(data.id);
                         }}
                       />
                     ))}
@@ -260,8 +252,14 @@ const Home = () => {
                   type="text"
                   placeholder="ID. Member"
                   className="input input-bordered border-1 bg-white w-6/12 "
+                  onChange={(e) => setMemberId(parseInt(e.target.value))}
                 />
-                <span className="bg-orangeComponent text-white">Member</span>
+                <span
+                  className="bg-orangeComponent text-white"
+                  onClick={checkMemberId}
+                >
+                  Member
+                </span>
               </label>
             </div>
             <div className="w-11/12 h-[15rem] bg-gray-200 mx-auto rounded-xl mt-10 flex flex-row">
@@ -276,10 +274,12 @@ const Home = () => {
                   {`Rp.${subPrice}`}
                 </h1>
                 <h1 className="ml-16 text-md mt-2 text-black font-semibold">
-                  -$5
+                  {summary.discount}
                 </h1>
                 <hr className="w-10/12 border-2  border-slate-400 float-left mt-2" />
-                <h1 className="ml-16 text-md mt-6 text-black font-bold">$10</h1>
+                <h1 className="ml-16 text-md mt-6 text-black font-bold">
+                  {summary.total}
+                </h1>
               </div>
             </div>
 
@@ -313,7 +313,15 @@ const Home = () => {
   );
 };
 
-const CardKeranjang: FC<CartProps> = ({ id, prodcut_name, price, qty }) => {
+const CardKeranjang: FC<CartProps> = ({
+  id,
+  prodcut_name,
+  price,
+  qty,
+  AddProduct,
+  DecProduct,
+  DelProduct,
+}) => {
   const [cart, setCart] = useState<ProductsTypes[]>([]);
   const [count, setCount] = useState<number>(1);
   const [priceTotal, setPriceTotal] = useState<any>();
@@ -326,11 +334,11 @@ const CardKeranjang: FC<CartProps> = ({ id, prodcut_name, price, qty }) => {
     setCount((count) => count - 1);
   }
 
-  const subPrice = price * count;
+  // const subPrice = price * count;
 
-  useEffect(() => {
-    setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
-  }, [priceTotal, count]);
+  // useEffect(() => {
+  //   setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
+  // }, [priceTotal, count]);
 
   useEffect(() => {
     for (const item of cart) {
@@ -349,7 +357,7 @@ const CardKeranjang: FC<CartProps> = ({ id, prodcut_name, price, qty }) => {
             {prodcut_name}
           </h1>
           <div className="flex flex-row justify-between">
-            <h2 className="text-lg text-black mt-2 ml-3">{`Rp.${subPrice}`}</h2>
+            <h2 className="text-lg text-black mt-2 ml-3">{`Rp.${price}`}</h2>
             <div className="flex flex-row mr-2 mt-2">
               <CustomButton
                 id="btn-add"
@@ -376,6 +384,7 @@ const CardKeranjang: FC<CartProps> = ({ id, prodcut_name, price, qty }) => {
               )}
             </div>
           </div>
+          <p onClick={DelProduct}>delete</p>
         </div>
       </div>
     </>
