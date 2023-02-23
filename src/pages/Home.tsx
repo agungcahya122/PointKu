@@ -24,6 +24,7 @@ interface CartProps {
   qty?: number;
   AddProduct?: () => void;
   DecProduct?: () => void;
+  DelProduct?: () => void;
 }
 
 const Home = () => {
@@ -68,7 +69,6 @@ const Home = () => {
   const [cart, setCart] = useState<ProductsTypes[]>([]);
 
   const handleCart = (data: ProductsTypes) => {
-    // console.log(data);
     let isPresent = false;
     cart.forEach((item) => {
       if (data.id === item.id) {
@@ -89,8 +89,6 @@ const Home = () => {
   for (const item of cart) {
     item.qty = 1;
   }
-
-  // console.log(cart);
 
   // function handleCart(data: ProductsTypes) {
   //   const checkExist = localStorage.getItem("AddtoCart");
@@ -117,23 +115,35 @@ const Home = () => {
   //   setLoading(false);
   // }, []);
 
-  // function addProduct() {
-  //   setCount((prevState) => prevState + 1);
-  // }
+  // const handleEdit = (data: ProductsTypes, i: number) => {
+  //   let ind = -1;
+  //   cart.forEach((item, index) => {
+  //     if (item.id === data.id) {
+  //       ind = index;
+  //     }
+  //   });
+  //   const tempArr = cart;
+  //   tempArr[ind].amount += i;
 
-  // function decProduct() {
-  //   setCount((count) => count - 1);
-  // }
+  //   if (tempArr[ind].amount === 0) {
+  //     tempArr[ind].amount = 1;
+  //     setCart([...tempArr]);
+  //   }
+  // };
 
-  // function addProduct(index: number) {
-  //   count[index] = count[index]++;
-  //   // setCount(count[index]);
-  // }
-
-  // function decProduct(index: number) {
-  //   count[index] = count[index]--;
-  //   // setCount((count) => count - 1);
-  // }
+  // const handleDec = (data: any) => {
+  //   const updateQty = cart.map((item) => {
+  //     if (item.id === data.id) {
+  //       return {
+  //         ...item,
+  //         qty: item.qty + 1,
+  //       };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   setCart(updateQty);
+  // };
 
   const [subPrice, setSubPrice] = useState(0);
 
@@ -148,6 +158,11 @@ const Home = () => {
   useEffect(() => {
     handlePrice();
   });
+
+  const handleRemove = (id: number) => {
+    const arr = cart.filter((item) => item.id !== id);
+    setCart(arr);
+  };
 
   return (
     <Layout>
@@ -166,9 +181,6 @@ const Home = () => {
                 <p className="mt-3 text-gray-400 text-lg ml-8">
                   Temukan, yang kamu butuhkan
                 </p>
-                {cart?.map((item, index) => (
-                  <p key={index}>{item.price * item.qty}</p>
-                ))}
               </div>
               <div className="flex-1">
                 <div className="form-control ">
@@ -246,10 +258,13 @@ const Home = () => {
                         price={data.price}
                         qty={data.qty}
                         AddProduct={() => {
-                          // addProduct();
+                          // handleAdd();
                         }}
                         DecProduct={() => {
-                          // decProduct();
+                          // handleDec();
+                        }}
+                        DelProduct={() => {
+                          handleRemove(data.id);
                         }}
                       />
                     ))}
@@ -323,6 +338,7 @@ const CardKeranjang: FC<CartProps> = ({
   qty,
   AddProduct,
   DecProduct,
+  DelProduct,
 }) => {
   return (
     <>
@@ -348,7 +364,7 @@ const CardKeranjang: FC<CartProps> = ({
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={DecProduct}
+                  onClick={DelProduct}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                   disabled
                 />
@@ -362,6 +378,7 @@ const CardKeranjang: FC<CartProps> = ({
               )}
             </div>
           </div>
+          <p onClick={DelProduct}>delete</p>
         </div>
       </div>
     </>

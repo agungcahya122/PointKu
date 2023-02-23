@@ -42,6 +42,7 @@ export interface ProductsTypes {
   product_image: string;
   supplier: string;
   qty: number;
+  amount: number;
   ProductType: [
     {
       id: number;
