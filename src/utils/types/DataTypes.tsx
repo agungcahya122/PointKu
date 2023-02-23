@@ -41,7 +41,7 @@ export interface ProductsTypes {
   price: number;
   product_image: string;
   supplier: string;
-  qty: number;
+  qty: any;
   amount: number;
   ProductType: [
     {
@@ -51,7 +51,7 @@ export interface ProductsTypes {
       product_name: string;
       minimum_stock: number;
       stock: number;
-      qty: 0;
+      qty: any;
       buying_price: number;
       price: number;
       product_image: string;
