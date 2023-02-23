@@ -5,6 +5,7 @@ import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import { ProductsTypes } from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
+import { Link } from "react-router-dom";
 
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
 import LogoMie from "../assets/addProduct.svg";
@@ -15,7 +16,7 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 import { FaShoppingCart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface CartProps {
   id?: number;
@@ -32,6 +33,7 @@ const Home = () => {
   const [cookies, setCookies] = useCookies(["token"]);
   const checkToken = cookies.token;
   const MySwal = withReactContent(Swal);
+  const { transaction_id } = useParams();
 
   const [subPrice, setSubPrice] = useState(0);
   const [products, setProducts] = useState<ProductsTypes[]>([]);
@@ -123,6 +125,8 @@ const Home = () => {
       ...prevSummary,
       total: totalPrice,
     }));
+    localStorage.setItem("summary", JSON.stringify(totalPrice));
+    localStorage.setItem("discount", JSON.stringify(summary.discount));
   }, [subPrice, summary.discount]);
 
   const handlePrice = () => {
@@ -131,6 +135,7 @@ const Home = () => {
       ans += item.qty * item.price;
     });
     setSubPrice(ans);
+    localStorage.setItem("subPrice", JSON.stringify(subPrice));
   };
 
   useEffect(() => {
@@ -159,6 +164,10 @@ const Home = () => {
     });
     setCart(_cart);
   };
+
+  useEffect(() => {
+    localStorage.setItem("keranjang", JSON.stringify(cart));
+  }, [cart]);
 
   return (
     <Layout>
@@ -300,28 +309,15 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="form-control w-10/12 mx-auto mt-10">
-              <label className="label">
-                <span className="label-text text-black">Metode Pembayaran</span>
-              </label>
-              <select
-                defaultValue={"DEFAULT"}
-                className="select select-bordered bg-bgCard text-black"
-              >
-                <option value="DEFAULT" disabled>
-                  Pilih Salah Satu
-                </option>
-                <option value={"tunai"}>Tunai</option>
-                <option value={"Bank"}>ATM / Bank Transfer</option>
-                <option value={"qris"}>QRIS</option>
-              </select>
-            </div>
             <div className="mx-auto mt-10">
-              <CustomButton
-                id="btn-continuePayment"
-                label="Lanjutkan Pembayaran"
-                className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
-              />
+              <Link to="/detail-transaksi">
+                <CustomButton
+                  id="btn-continuePayment"
+                  label="Lanjutkan Pembayaran"
+                  className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
+                  // onClick={navigate(`detail-transaksi/1`)}
+                />
+              </Link>
             </div>
           </div>
         </div>
@@ -339,17 +335,20 @@ const CardKeranjang: FC<CartProps> = ({
   DecProduct,
   DelProduct,
 }) => {
-  const [cart, setCart] = useState<ProductsTypes[]>([]);
-  const [count, setCount] = useState<number>(1);
-  const [priceTotal, setPriceTotal] = useState<any>();
+  useEffect(() => {
+    localStorage.setItem("price", JSON.stringify(price));
+  }, [price]);
+  // const [cart, setCart] = useState<ProductsTypes[]>([]);
+  // const [count, setCount] = useState<number>(1);
+  // const [priceTotal, setPriceTotal] = useState<any>();
 
-  function addCart() {
-    setCount((prevState) => prevState + 1);
-  }
+  // function addCart() {
+  //   setCount((prevState) => prevState + 1);
+  // }
 
-  function minCart() {
-    setCount((count) => count - 1);
-  }
+  // function minCart() {
+  //   setCount((count) => count - 1);
+  // }
 
   // const subPrice = price * count;
 
