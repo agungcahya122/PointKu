@@ -85,7 +85,7 @@ function App() {
     },
     {
       path: "/report",
-      element: checkToken ? <Report /> : <Navigate />,
+      element: checkToken ? <Report /> : <Navigate to={"/"} />,
     },
     {
       path: "/addMember",

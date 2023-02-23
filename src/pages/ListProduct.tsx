@@ -101,9 +101,6 @@ const ListProduct = () => {
           <SideNav />
         </div>
         <div className="col-span-9 -ml-10 pr-10 pt-16">
-          {/* <div className="flex justify-center ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
-            <MdOutlineShoppingCart className="w-6 h-6 text-color3" />
-          </div> */}
           <p className="text-[36px] text-color3 font-semibold tracking-widest mt-8">
             Daftar Produk
           </p>
