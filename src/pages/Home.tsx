@@ -64,6 +64,15 @@ const Home = () => {
 
   const [babi, setBabi] = useState();
   const [cart, setCart] = useState<ProductsTypes[]>([]);
+  const [qtyProduct, setqtyProduct] = useState<number>(1);
+
+  function handleCartAdd() {
+    setqtyProduct((prevState) => prevState + 1);
+  }
+
+  function handleCartMin() {
+    setqtyProduct((qtyProduct) => qtyProduct - 1);
+  }
 
   const handleCart = (data: ProductsTypes) => {
     // console.log(data);
@@ -83,10 +92,6 @@ const Home = () => {
     }
     setCart([...cart, data]);
   };
-
-  for (const item of cart) {
-    item.qty = 1;
-  }
 
   // console.log(cart);
 
@@ -136,6 +141,10 @@ const Home = () => {
   // console.log(count);
 
   const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    setPrice(JSON.parse(localStorage.getItem("subPrice") || ""));
+  }, [price]);
 
   function handlePrice() {
     let ans = 0;
@@ -279,7 +288,7 @@ const Home = () => {
               </div>
               <div className="flex-1">
                 <h1 className="ml-16 text-md mt-9 text-black font-semibold">
-                  $20
+                  {price}
                 </h1>
                 <h1 className="ml-16 text-md mt-2 text-black font-semibold">
                   -$5
@@ -328,15 +337,31 @@ const CardKeranjang: FC<CartProps> = ({
   AddProduct,
   DecProduct,
 }) => {
-  // const [count, setCount] = useState<number>(1);
+  const [cart, setCart] = useState<ProductsTypes[]>([]);
+  const [count, setCount] = useState<number>(1);
+  const [priceTotal, setPriceTotal] = useState<any>();
 
-  // function addProduct() {
-  //   setCount((prevState) => prevState + 1);
-  // }
+  function addCart() {
+    setCount((prevState) => prevState + 1);
+  }
 
-  // function decProduct() {
-  //   setCount((count) => count - 1);
-  // }
+  function minCart() {
+    setCount((count) => count - 1);
+  }
+
+  const subPrice = price * count;
+
+  useEffect(() => {
+    setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
+  }, [priceTotal, count]);
+
+  useEffect(() => {
+    for (const item of cart) {
+      localStorage.setItem("quantity", JSON.stringify((item.qty = count)));
+      console.log(item.qty);
+    }
+  }, [cart, count]);
+
   return (
     <>
       <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">
@@ -348,20 +373,20 @@ const CardKeranjang: FC<CartProps> = ({
             {prodcut_name}
           </h1>
           <div className="flex flex-row justify-between">
-            <h2 className="text-lg text-black mt-2 ml-3">{`Rp.${price}`}</h2>
+            <h2 className="text-lg text-black mt-2 ml-3">{`Rp.${subPrice} `}</h2>
             <div className="flex flex-row mr-2 mt-2">
               <CustomButton
                 id="btn-add"
                 label="+"
-                onClick={AddProduct}
+                onClick={addCart}
                 className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
               />
-              <p className=" text-md text-black ">{qty}</p>
-              {qty === 1 ? (
+              <p className=" text-md text-black ">{count}</p>
+              {count === 1 ? (
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={DecProduct}
+                  onClick={minCart}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                   disabled
                 />
@@ -369,7 +394,7 @@ const CardKeranjang: FC<CartProps> = ({
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={DecProduct}
+                  onClick={minCart}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                 />
               )}
