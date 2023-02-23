@@ -73,6 +73,7 @@ const Home = () => {
   const handleCart = (data: ProductsTypes) => {
     let isPresent = false;
     cart.forEach((item) => {
+      // item.qty = 1;
       if (data.id === item.id) {
         isPresent = true;
       }
@@ -85,13 +86,16 @@ const Home = () => {
       });
       return;
     }
+
+    data.qty = 1;
     setCart([...cart, data]);
     localStorage.setItem("cartData", JSON.stringify([...cart, data]));
   };
 
-  for (const item of cart) {
-    item.qty = 1;
-  }
+  // for (const item of cart) {
+  //   item.qty = 1;
+  // }
+
   const checkMemberId = () => {
     axios
       .get(
@@ -136,6 +140,24 @@ const Home = () => {
   const handleRemove = (id: number) => {
     const arr = cart.filter((item) => item.id !== id);
     setCart(arr);
+  };
+
+  const handleAdd = (data: ProductsTypes, index: any) => {
+    let _cart = cart.map((item, index) => {
+      return item.id === data.id
+        ? { ...item, qty: (item.qty = item.qty + 1) }
+        : item;
+    });
+    setCart(_cart);
+  };
+
+  const handleDec = (data: ProductsTypes, index: any) => {
+    let _cart = cart.map((item, index) => {
+      return item.id === data.id
+        ? { ...item, qty: (item.qty = item.qty - 1) }
+        : item;
+    });
+    setCart(_cart);
   };
 
   return (
@@ -193,7 +215,6 @@ const Home = () => {
                     id={data.id}
                     product_name={data.product_name}
                     stock={data.stock}
-                    qty={data.qty}
                     price={data.price}
                     product_image={LogoMie}
                     onClickCart={() => handleCart(data)}
@@ -229,14 +250,10 @@ const Home = () => {
                       <CardKeranjang
                         key={data.id}
                         prodcut_name={data.product_name}
-                        price={data.price}
+                        price={data.price * data.qty}
                         qty={data.qty}
-                        AddProduct={() => {
-                          // handleAdd();
-                        }}
-                        DecProduct={() => {
-                          // handleDec();
-                        }}
+                        AddProduct={() => handleAdd(data, index)}
+                        DecProduct={() => handleDec(data, index)}
                         DelProduct={() => {
                           handleRemove(data.id);
                         }}
@@ -274,11 +291,11 @@ const Home = () => {
                   {`Rp.${subPrice}`}
                 </h1>
                 <h1 className="ml-16 text-md mt-2 text-black font-semibold">
-                  {summary.discount}
+                  {`Rp.${summary.discount}`}
                 </h1>
                 <hr className="w-10/12 border-2  border-slate-400 float-left mt-2" />
                 <h1 className="ml-16 text-md mt-6 text-black font-bold">
-                  {summary.total}
+                  {`Rp.${summary.total}`}
                 </h1>
               </div>
             </div>
@@ -340,12 +357,12 @@ const CardKeranjang: FC<CartProps> = ({
   //   setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
   // }, [priceTotal, count]);
 
-  useEffect(() => {
-    for (const item of cart) {
-      localStorage.setItem("quantity", JSON.stringify((item.qty = count)));
-      console.log(item.qty);
-    }
-  }, [cart, count]);
+  // useEffect(() => {
+  //   for (const item of cart) {
+  //     localStorage.setItem("quantity", JSON.stringify((item.qty = count)));
+  //     console.log(item.qty);
+  //   }
+  // }, [cart, count]);
   return (
     <>
       <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">
@@ -362,23 +379,22 @@ const CardKeranjang: FC<CartProps> = ({
               <CustomButton
                 id="btn-add"
                 label="+"
-                onClick={addCart}
+                onClick={AddProduct}
                 className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
               />
-              <p className=" text-md text-black ">{count}</p>
-              {count === 1 ? (
+              <p className=" text-md text-black ">{qty}</p>
+              {qty === 1 ? (
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={minCart}
+                  onClick={DelProduct}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
-                  disabled
                 />
               ) : (
                 <CustomButton
                   id="btn-add"
                   label="-"
-                  onClick={minCart}
+                  onClick={DecProduct}
                   className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg ml-2"
                 />
               )}
