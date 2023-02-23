@@ -367,8 +367,8 @@ const CardKeranjang: FC<CartProps> = ({
                 onClick={addCart}
                 className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
               />
-              <p className=" text-md text-black ">{qty}</p>
-              {qty === 1 ? (
+              <p className=" text-md text-black ">{count}</p>
+              {count === 1 ? (
                 <CustomButton
                   id="btn-add"
                   label="-"
