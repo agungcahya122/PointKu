@@ -138,10 +138,10 @@ const EditProduk = () => {
           <SideNav />
         </div>
 
-        <div className="flex col-span-9 pl-16 pr-10 pt-16">
-          <div className=" w-8/12 px-8 pt-8">
+        <div className="flex col-span-9 pl-0 pr-24 pt-32">
+          <div className=" w-8/12 px-0 pt-8">
             <div className="w-72 shadow-[2px_4px_10px_0px_rgba(36,36,36,0.4)] rounded-3xl overflow-hidden">
-              <img src={product_image} alt="logo.svg" className="" />
+              <img src={Logo} alt="logo.svg" className="" />
             </div>
 
             <input

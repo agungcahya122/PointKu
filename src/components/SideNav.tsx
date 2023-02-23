@@ -23,8 +23,7 @@ export default function SideNav() {
 
   const handleLogout = () => {
     const remove = localStorage.removeItem("token");
-    document.cookie =
-      "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setResponseToken(remove);
     Swal.fire({
       title: "Berhasil Logout",
@@ -36,7 +35,7 @@ export default function SideNav() {
 
   return (
     <>
-      <div className="min-h-screen w-[20rem] bg-BgSidebar shadow-xl  md:flex lg:flex">
+      <div className="min-h-screen w-[16rem] bg-BgSidebar shadow-xl  md:flex lg:flex">
         <div className="flex flex-col ">
           <div className="flex flex-row justify-center mt-10">
             <img src={salesLogo} className="w-2/12 mt-5" />
@@ -45,34 +44,24 @@ export default function SideNav() {
             </h2>
           </div>
           <ul className="mt-20 flex flex-col justify-center w-full">
-            <li className="ml-5">
+            <li className="ml-5" onClick={() => navigate("/home")}>
               <CustomButton
                 id="btn-beranda"
-                icon={
-                  <FaHome className="w-[1.5rem] h-[1.5rem] mr-5" />
-                }
+                icon={<FaHome className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Beranda"
                 className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
             </li>
 
-            <li
-              className="mt-4 ml-5"
-              onClick={() => navigate("/listProduct")}
-            >
+            <li className="mt-4 ml-5" onClick={() => navigate("/listProduct")}>
               <CustomButton
                 id="btn-produk"
-                icon={
-                  <FaBoxOpen className="w-[1.5rem] h-[1.5rem] mr-5" />
-                }
+                icon={<FaBoxOpen className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Produk"
                 className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
             </li>
-            <li
-              className="mt-4 ml-5"
-              onClick={() => navigate("/listMember")}
-            >
+            <li className="mt-4 ml-5" onClick={() => navigate("/listMember")}>
               <Link to="/listMember">
                 <CustomButton
                   id="btn-member"
@@ -84,15 +73,10 @@ export default function SideNav() {
                 />
               </Link>
             </li>
-            <li
-              className="mt-4 ml-5"
-              onClick={() => navigate("/report")}
-            >
+            <li className="mt-4 ml-5" onClick={() => navigate("/report")}>
               <CustomButton
                 id="btn-laporan"
-                icon={
-                  <FaBookReader className="w-[1.5rem] h-[1.5rem] mr-5" />
-                }
+                icon={<FaBookReader className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Laporan"
                 className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
               />
@@ -100,9 +84,7 @@ export default function SideNav() {
             <li className="mt-4 ml-5">
               <CustomButton
                 id="btn-keluar"
-                icon={
-                  <FaShareSquare className="w-[1.5rem] h-[1.5rem] mr-5" />
-                }
+                icon={<FaShareSquare className="w-[1.5rem] h-[1.5rem] mr-5" />}
                 label="Keluar"
                 className="text-xl text-orangeComponent font-poppins font-semibold ml-3 hover:bg-orangeComponent py-2 p-4 w-[80%] hover:text-white flex flex-row hover:rounded-xl"
                 onClick={handleLogout}

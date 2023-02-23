@@ -19,10 +19,6 @@ export interface productData {
   supplier?: string;
 }
 
-export interface MembersTypes {
-  data?: Member[];
-}
-
 export interface MemberIdTypes {
   email?: string;
   name?: string;
@@ -31,7 +27,47 @@ export interface MemberIdTypes {
 }
 
 export interface ProductsTypes {
-  data?: ProductType[];
+  id: number;
+  upc: string;
+  category: string;
+  product_name: string;
+  minimum_stock: number;
+  stock: number;
+  buying_price: number;
+  price: number;
+  product_image: string;
+  supplier: string;
+  qty: any;
+  amount: number;
+  ProductType: [
+    {
+      id: number;
+      upc: string;
+      category: string;
+      product_name: string;
+      minimum_stock: number;
+      stock: number;
+      qty: any;
+      buying_price: number;
+      price: number;
+      product_image: string;
+      supplier: string;
+    }
+  ];
+}
+
+export interface ProductTypes {
+  id: number;
+  upc: string;
+  category: string;
+  product_name: string;
+  minimum_stock: number;
+  stock: number;
+  buying_price: number;
+  price: number;
+  product_image: string;
+  supplier: string;
+  qty: 0;
 }
 
 export interface MembersTypes {
@@ -57,18 +93,6 @@ export interface transactionsReports {
   transaction_status?: string;
 }
 
-type ProductType = {
-  id?: number;
-  upc?: string;
-  category?: string;
-  product_name?: string;
-  minimum_stock?: number;
-  stock?: number;
-  buying_price?: number;
-  price?: number;
-  product_image?: string;
-  supplier?: string;
-};
 export interface transactionType {
   created_at: string;
   customer_id: number;

@@ -31,9 +31,7 @@ const Login = () => {
     }
   }, [email, password]);
 
-  const handleLogin = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const body = {
@@ -48,14 +46,9 @@ const Login = () => {
       )
       .then((res) => {
         const { data, message } = res.data;
-        localStorage.setItem(
-          "token",
-          JSON.stringify(data.token)
-        );
-        setCookie("token", res.data.token, { path: "/" });
+        localStorage.setItem("token", JSON.stringify(data.token));
+        setCookie("token", res.data.data.token, { path: "/" });
 
-        console.log(data.token);
-        console.log(body);
         dispatch(handleAuth(true));
 
         MySwal.fire({
@@ -63,10 +56,7 @@ const Login = () => {
           text: message,
           showCancelButton: false,
         });
-
-        if (!loading) {
-          navigate("/home");
-        }
+        navigate("/home");
       })
       .catch((err) => {
         console.log(err);
@@ -83,11 +73,7 @@ const Login = () => {
             POINTKU
           </h1>
         </div>
-        <img
-          src={imagelogin}
-          alt="PointKu"
-          className="w-[25rem] pt-4"
-        />
+        <img src={imagelogin} alt="PointKu" className="w-[25rem] pt-4" />
         <h1 className="text-orangeComponent font-bold tracking-[0.3rem] text-[2rem]">
           Masuk
         </h1>

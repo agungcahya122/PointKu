@@ -10,16 +10,25 @@ import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
 
 import withReactContent from "sweetalert2-react-content";
-import {
-  MemberIdTypes,
-  MembersTypes,
-} from "../utils/types/DataTypes";
+import { MemberIdTypes } from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { FaArrowCircleLeft } from "react-icons/fa";
+
+interface MembersTypes {
+  data?: Member[];
+}
+
+type Member = {
+  id?: number;
+  email?: string;
+  name?: string;
+  phone_number?: string;
+  address?: string;
+};
 
 const ListMember = () => {
   const navigate = useNavigate();
@@ -28,6 +37,20 @@ const ListMember = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [customers, setCustomers] = useState<MembersTypes>({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Member[]>([]);
+  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearchQuery(event.target.value);
+    const query = event.target.value.toLowerCase();
+    const filteredResults = customers.data?.filter(
+      (customer) =>
+        customer.name?.toLowerCase().includes(query) ||
+        customer.email?.toLowerCase().includes(query) ||
+        customer.phone_number?.toLowerCase().includes(query) ||
+        customer.address?.toLowerCase().includes(query)
+    );
+    setSearchResults(filteredResults ?? []);
+  }
 
   useEffect(() => {
     fetchData();
@@ -57,8 +80,8 @@ const ListMember = () => {
         <div className="col-span-3">
           <SideNav />
         </div>
-        <div className="col-span-9 px-10 pt-16">
-          <div className="flex justify-center ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
+        <div className="col-span-9 -ml-10 pr-10 pt-16">
+          <div className="flex justify-center pt-5 ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
             <MdOutlineShoppingCart className="w-6 h-6 text-color3" />
           </div>
           <p className="text-[36px] text-color3 font-semibold tracking-widest mt-8">
@@ -72,6 +95,8 @@ const ListMember = () => {
                 type="search"
                 placeholder="Mencari Member . . . . . ."
                 className="input input-border w-full max-w-full h-8 px-3 rounded-full placeholder-color3 bg-[#F8F5F5] text-color3 text-[16px] tracking-wider font-medium"
+                value={searchQuery}
+                onChange={handleSearch}
               />
               <MdSearch className="w-8 h-8 text-color3" />
             </div>
@@ -110,37 +135,65 @@ const ListMember = () => {
 
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)] text-[14px]">
                 <>
-                  {customers.data?.map((data, index) => (
-                    <tr key={index}>
-                      <td className="text-center">{data.id}</td>
-                      <td>{data.name}</td>
-                      <td className="text-center text-[14px]">
-                        {data.address}
-                      </td>
-                      <td>{data.phone_number}</td>
-                      <td className="text-center">
-                        {data.email}
-                      </td>
-                      <td className="flex justify-center gap-5">
-                        <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
-                          <FiEdit
-                            className="w-5 h-5"
-                            onClick={() =>
-                              navigate(`/editMember/${data.id}`)
-                            }
-                          />
-                          <p
-                            className="text-[14px] pt-1"
-                            onClick={() =>
-                              navigate(`/editMember/${data.id}`)
-                            }
-                          >
-                            Edit
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {searchQuery
+                    ? searchResults.map((data, index) => (
+                        <tr key={index}>
+                          <td className="text-center">{data.id}</td>
+                          <td>{data.name}</td>
+                          <td className="text-center text-[14px]">
+                            {data.address}
+                          </td>
+                          <td>{data.phone_number}</td>
+                          <td className="text-center">{data.email}</td>
+                          <td className="flex justify-center gap-5">
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
+                              <FiEdit
+                                className="w-5 h-5"
+                                onClick={() =>
+                                  navigate(`/editMember/${data.id}`)
+                                }
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={() =>
+                                  navigate(`/editMember/${data.id}`)
+                                }
+                              >
+                                Edit
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    : customers.data?.map((data, index) => (
+                        <tr key={index}>
+                          <td className="text-center">{data.id}</td>
+                          <td>{data.name}</td>
+                          <td className="text-center text-[14px]">
+                            {data.address}
+                          </td>
+                          <td>{data.phone_number}</td>
+                          <td className="text-center">{data.email}</td>
+                          <td className="flex justify-center gap-5">
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
+                              <FiEdit
+                                className="w-5 h-5"
+                                onClick={() =>
+                                  navigate(`/editMember/${data.id}`)
+                                }
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={() =>
+                                  navigate(`/editMember/${data.id}`)
+                                }
+                              >
+                                Edit
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                 </>
               </tbody>
             </table>
@@ -176,9 +229,7 @@ const AddMember = () => {
     }
   }, [Members]);
 
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData: any = new FormData();
 
@@ -212,7 +263,7 @@ const AddMember = () => {
     <>
       <Layout>
         <div className="flex flex-row">
-          <div className="flex w-[20%] min-h-screen">
+          <div className="flex w-[17rem] min-h-screen">
             <SideNav />
           </div>
           <div className="flex w-[80%] min-h-screen">
@@ -222,17 +273,15 @@ const AddMember = () => {
                   <Link to="/listMember">
                     <CustomButton
                       id="btn-kembaliProfil"
-                      icon={
-                        <FaArrowCircleLeft className="mr-5 mt-1" />
-                      }
+                      icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
                       label="Kembali"
-                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4 flex flex-row hover:rounded-xl"
+                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-0 mt-14 py-2 p-4 flex flex-row hover:rounded-xl"
                     />
                   </Link>
                 </div>
               </div>
               <div className=" w-full">
-                <h1 className="text-4xl font-bold font-poppins mt-20 ">
+                <h1 className="text-4xl font-bold font-poppins mt-10 ">
                   Tambah Member Baru
                 </h1>
                 <form onSubmit={handleSubmit}>
@@ -247,7 +296,7 @@ const AddMember = () => {
                         <CustomInput
                           id="input-nama"
                           type="text"
-                          placeholder="Type here"
+                          placeholder="Contoh : Aldo Bimanda"
                           className="input input-bordered w-10/12 "
                           onChange={(e) =>
                             setMembers({
@@ -265,7 +314,7 @@ const AddMember = () => {
                         <CustomInput
                           id="input-nama"
                           type="email"
-                          placeholder="Type here"
+                          placeholder="Contoh: aldobimanda@gmail.com"
                           className="input input-bordered w-10/12 "
                           onChange={(e) =>
                             setMembers({
@@ -288,7 +337,7 @@ const AddMember = () => {
                         <CustomInput
                           id="input-nama"
                           type="text"
-                          placeholder="Type here"
+                          placeholder="Contoh : 089567876776"
                           className="input input-bordered w-10/12 "
                           onChange={(e) =>
                             setMembers({
@@ -305,8 +354,8 @@ const AddMember = () => {
                         </label>
                         <textarea
                           id="input-nama"
-                          placeholder="Type here"
-                          className="input input-bordered w-10/12 h-[11rem]"
+                          placeholder="Contoh : Jl. Makuk Jaya, Pakis, Malang"
+                          className="input input-bordered w-10/12 h-[11rem] py-2"
                           onChange={(e) =>
                             setMembers({
                               ...Members,
@@ -321,7 +370,7 @@ const AddMember = () => {
                         label="Tambah Member Baru"
                         type="submit"
                         disabled={isDisable}
-                        className="py-3 px-10 w-6/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
+                        className="py-3 px-5 w-6/12 text-[18px] font-semibold bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700"
                       />
                     </div>
                   </div>
@@ -376,9 +425,7 @@ const EditMember = () => {
       .finally(() => setLoading(false));
   }
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
     const formData = new FormData();
@@ -423,10 +470,7 @@ const EditMember = () => {
       .finally(() => setLoading(false));
   };
 
-  const handleChange = (
-    value: string,
-    key: keyof typeof objSubmit
-  ) => {
+  const handleChange = (value: string, key: keyof typeof objSubmit) => {
     let temp = { ...objSubmit };
     temp[key] = value;
     setObjSubmit(temp);
@@ -436,27 +480,25 @@ const EditMember = () => {
     <>
       <Layout>
         <div className="flex flex-row">
-          <div className="flex w-[20%] min-h-screen">
+          <div className="flex w-[17rem] min-h-screen">
             <SideNav />
           </div>
           <div className="flex w-[80%] min-h-screen">
-            <div className="flex flex-col w-full overflow-hidden ml-16 ">
+            <div className="flex flex-col w-full overflow-hidden mr-5 ml-16 ">
               <div className="flex flex-row h-[8rem] mt-10 ">
                 <div className="flex w-[40%] ">
                   <Link to="/listMember">
                     <CustomButton
                       id="btn-kembaliProfil"
-                      icon={
-                        <FaArrowCircleLeft className="mr-5 mt-1" />
-                      }
+                      icon={<FaArrowCircleLeft className="mr-5 mt-1" />}
                       label="Kembali"
-                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-20 mt-10 py-2 p-4   flex flex-row hover:rounded-xl "
+                      className="text-2xl text-orangeComponent font-poppins font-semibold ml-4 mt-10 py-2 flex flex-row hover:rounded-xl "
                     />
                   </Link>
                 </div>
               </div>
               <div className=" w-full">
-                <h1 className="text-4xl font-bold font-poppins mt-20 ">
+                <h1 className="text-4xl font-bold font-poppins mt-8">
                   Edit Member PointKu
                 </h1>
 
@@ -477,9 +519,7 @@ const EditMember = () => {
                         className="input input-bordered w-10/12 "
                         placeholder="Type here"
                         defaultValue={nama}
-                        onChange={(e) =>
-                          handleChange(e.target.value, "name")
-                        }
+                        onChange={(e) => handleChange(e.target.value, "name")}
                       />
                       <label className="label mt-8">
                         <span className="label-text text-lg text-black">
@@ -492,9 +532,7 @@ const EditMember = () => {
                         className="input input-bordered w-10/12 "
                         placeholder="Type here"
                         defaultValue={email}
-                        onChange={(e) =>
-                          handleChange(e.target.value, "email")
-                        }
+                        onChange={(e) => handleChange(e.target.value, "email")}
                       />
                     </div>
                   </div>
@@ -503,7 +541,7 @@ const EditMember = () => {
                     <div className="form-control w-full mt-16">
                       <label className="label">
                         <span className="label-text text-lg text-black">
-                          No. Telepon:
+                          No. Telepon :
                         </span>
                       </label>
                       <CustomInput
@@ -513,10 +551,7 @@ const EditMember = () => {
                         placeholder="Type here"
                         defaultValue={phone}
                         onChange={(e) =>
-                          handleChange(
-                            e.target.value,
-                            "phone_number"
-                          )
+                          handleChange(e.target.value, "phone_number")
                         }
                       />
                       <label className="label mt-8">
@@ -526,7 +561,7 @@ const EditMember = () => {
                       </label>
                       <textarea
                         id="input-nama"
-                        className="input input-bordered w-10/12 h-[11rem]"
+                        className="input input-bordered w-10/12 h-[11rem] py-2"
                         placeholder="Type here"
                         defaultValue={address}
                         onChange={(e) =>
@@ -537,7 +572,7 @@ const EditMember = () => {
                     <CustomButton
                       id="btn-perbaruiTenant"
                       label="Perbarui Data Member"
-                      className="py-3 px-10 w-10/12 text-lg bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-color3"
+                      className="py-3 px-14 text-[18px] font-semibold bg-orangeComponent text-white rounded-xl mt-10 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-color3"
                       loading={loading}
                     />
                   </div>
