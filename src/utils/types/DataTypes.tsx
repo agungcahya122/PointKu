@@ -31,18 +31,32 @@ export interface MemberIdTypes {
 }
 
 export interface ProductsTypes {
-  id?: number;
-  upc?: string;
-  category?: string;
-  product_name?: string;
-  minimum_stock?: number;
-  stock?: number;
-  buying_price?: number;
-  price?: number;
-  product_image?: string;
-  supplier?: string;
-  qty?: number;
-  data?: ProductType[];
+  id: number;
+  upc: string;
+  category: string;
+  product_name: string;
+  minimum_stock: number;
+  stock: number;
+  buying_price: number;
+  price: number;
+  product_image: string;
+  supplier: string;
+  qty: number;
+  ProductType: [
+    {
+      id: number;
+      upc: string;
+      category: string;
+      product_name: string;
+      minimum_stock: number;
+      stock: number;
+      qty: 0;
+      buying_price: number;
+      price: number;
+      product_image: string;
+      supplier: string;
+    }
+  ];
 }
 
 export interface ProductTypes {
