@@ -53,19 +53,19 @@ function App() {
     },
     {
       path: "/listProduct",
-      element: <ListProduct />,
+      element: checkToken ? <ListProduct /> : <Navigate to={"/"} />,
     },
     {
       path: "/addProduct",
-      element: <AddProduct />,
+      element: checkToken ? <AddProduct /> : <Navigate to={"/"} />,
     },
     {
       path: "/editProduct/:product_id",
-      element: <EditProduct />,
+      element: checkToken ? <EditProduct /> : <Navigate to={"/"} />,
     },
     {
       path: "/profile",
-      element: <Profile />,
+      element: checkToken ? <Profile /> : <Navigate to={"/"} />,
     },
     {
       path: "/editProfile",
@@ -73,19 +73,19 @@ function App() {
     },
     {
       path: "/listMember",
-      element: <ListMember />,
+      element: checkToken ? <ListMember /> : <Navigate to={"/"} />,
     },
     {
       path: "/addMember",
-      element: <AddMember />,
+      element: checkToken ? <AddMember /> : <Navigate to={"/"} />,
     },
     {
       path: "/editMember/:customer_id",
-      element: <EditMember />,
+      element: checkToken ? <EditMember /> : <Navigate to={"/"} />,
     },
     {
       path: "/report",
-      element: <Report />,
+      element: checkToken ? <Report /> : <Navigate />,
     },
     {
       path: "/addMember",

@@ -85,8 +85,8 @@ const Home = () => {
     });
     if (isPresent) {
       MySwal.fire({
-        title: "Item is Already",
-        text: "change your option",
+        title: "Produk Sudah Dipilih",
+        text: "Pilihlah Produk yang Lainnya",
         showCancelButton: false,
       });
       return;
@@ -173,10 +173,6 @@ const Home = () => {
   useEffect(() => {
     filterProducts();
   }, [filterProducts]);
-
-  // useEffect(() => {
-  //   localStorage.setItem("keranjang", JSON.stringify(cart));
-  // }, [cart]);
 
   return (
     <Layout>
@@ -362,30 +358,7 @@ const CardKeranjang: FC<CartProps> = ({
   useEffect(() => {
     localStorage.setItem("price", JSON.stringify(price));
   }, [price]);
-  // const [cart, setCart] = useState<ProductsTypes[]>([]);
-  // const [count, setCount] = useState<number>(1);
-  // const [priceTotal, setPriceTotal] = useState<any>();
 
-  // function addCart() {
-  //   setCount((prevState) => prevState + 1);
-  // }
-
-  // function minCart() {
-  //   setCount((count) => count - 1);
-  // }
-
-  // const subPrice = price * count;
-
-  // useEffect(() => {
-  //   setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
-  // }, [priceTotal, count]);
-
-  // useEffect(() => {
-  //   for (const item of cart) {
-  //     localStorage.setItem("quantity", JSON.stringify((item.qty = count)));
-  //     console.log(item.qty);
-  //   }
-  // }, [cart, count]);
   return (
     <>
       <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">

@@ -93,20 +93,6 @@ export interface transactionsReports {
   transaction_status?: string;
 }
 
-type ProductType = {
-  id: number;
-  upc: string;
-  category: string;
-  product_name: string;
-  minimum_stock: number;
-  stock: number;
-  qty: any;
-  buying_price: number;
-  price: number;
-  product_image: string;
-  supplier: string;
-};
-
 export interface transactionType {
   created_at: string;
   customer_id: number;

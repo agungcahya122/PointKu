@@ -76,7 +76,6 @@ function DetailTransaksi() {
 
     const getDiscount = await localStorage.getItem("discount");
     setDiscount(JSON.parse(getDiscount || ""));
-    console.log(cart);
   }
 
   useEffect(() => {
@@ -86,7 +85,10 @@ function DetailTransaksi() {
   return (
     <Layout>
       <div className="flex flex-row">
-        <SideNav />
+        <div className="flex w-[17rem] min-h-screen">
+          <SideNav />
+        </div>
+
         <div className="flex flex-col w-full">
           <div className="flex flex-row h-[8rem] mt-10">
             <div className="flex-1 px-12 ">

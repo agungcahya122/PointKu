@@ -10,7 +10,7 @@ import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
 
 import withReactContent from "sweetalert2-react-content";
-import { MemberIdTypes, MembersTypes } from "../utils/types/DataTypes";
+import { MemberIdTypes } from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
@@ -29,6 +29,7 @@ type Member = {
   phone_number?: string;
   address?: string;
 };
+
 const ListMember = () => {
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token"]);
