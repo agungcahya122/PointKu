@@ -1,4 +1,9 @@
-import React, { useState, useEffect, FC, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  FC,
+  useCallback,
+} from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
@@ -44,6 +49,10 @@ const Home = () => {
     total: 0,
   });
   const [memberId, setMemberId] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
+  const [filteredProducts, setFilteredProducts] = useState<
+    ProductsTypes[]
+  >([]);
 
   useEffect(() => {
     fetchData();
@@ -158,6 +167,18 @@ const Home = () => {
     });
     setCart(_cart);
   };
+  const filterProducts = useCallback(() => {
+    const filtered = products.filter((product) =>
+      product.product_name
+        .toLowerCase()
+        .includes(searchText.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [products, searchText]);
+
+  useEffect(() => {
+    filterProducts();
+  }, [filterProducts]);
 
   return (
     <Layout>
@@ -200,6 +221,9 @@ const Home = () => {
                       type="text"
                       placeholder="Pencarian..."
                       className="input bg-slate-200  placeholder-black w-[65%]"
+                      onChange={(e) =>
+                        setSearchText(e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -208,17 +232,29 @@ const Home = () => {
 
             <div className="w-full min-h-screen mt-10 ml-3">
               <div className="grid grid-cols-3 gap-2">
-                {products.map((data, index) => (
-                  <Card
-                    key={data.id}
-                    id={data.id}
-                    product_name={data.product_name}
-                    stock={data.stock}
-                    price={data.price}
-                    product_image={LogoMie}
-                    onClickCart={() => handleCart(data)}
-                  />
-                ))}
+                {searchText !== ""
+                  ? filteredProducts.map((data, index) => (
+                      <Card
+                        key={data.id}
+                        id={data.id}
+                        product_name={data.product_name}
+                        stock={data.stock}
+                        price={data.price}
+                        product_image={LogoMie}
+                        onClickCart={() => handleCart(data)}
+                      />
+                    ))
+                  : products.map((data, index) => (
+                      <Card
+                        key={data.id}
+                        id={data.id}
+                        product_name={data.product_name}
+                        stock={data.stock}
+                        price={data.price}
+                        product_image={LogoMie}
+                        onClickCart={() => handleCart(data)}
+                      />
+                    ))}
               </div>
             </div>
             <CustomButton
@@ -268,7 +304,9 @@ const Home = () => {
                   type="text"
                   placeholder="ID. Member"
                   className="input input-bordered border-1 bg-white w-6/12 "
-                  onChange={(e) => setMemberId(parseInt(e.target.value))}
+                  onChange={(e) =>
+                    setMemberId(parseInt(e.target.value))
+                  }
                 />
                 <span
                   className="bg-orangeComponent text-white"
@@ -283,7 +321,9 @@ const Home = () => {
                 <h1 className="ml-6 text-md mt-9">Sub Total</h1>
                 <h1 className="ml-6 text-md mt-2">Diskon</h1>
                 <hr className="w-10/12 border-2 border-slate-400 float-right mt-2" />
-                <h1 className="ml-6 text-md mt-6 font-bold ">Jumlah Total</h1>
+                <h1 className="ml-6 text-md mt-6 font-bold ">
+                  Jumlah Total
+                </h1>
               </div>
               <div className="flex-1">
                 <h1 className="ml-16 text-md mt-9 text-black font-semibold">
@@ -297,23 +337,6 @@ const Home = () => {
                   {`Rp.${summary.total}`}
                 </h1>
               </div>
-            </div>
-
-            <div className="form-control w-10/12 mx-auto mt-10">
-              <label className="label">
-                <span className="label-text text-black">Metode Pembayaran</span>
-              </label>
-              <select
-                defaultValue={"DEFAULT"}
-                className="select select-bordered bg-bgCard text-black"
-              >
-                <option value="DEFAULT" disabled>
-                  Pilih Salah Satu
-                </option>
-                <option value={"tunai"}>Tunai</option>
-                <option value={"Bank"}>ATM / Bank Transfer</option>
-                <option value={"qris"}>QRIS</option>
-              </select>
             </div>
             <div className="mx-auto mt-10">
               <CustomButton
