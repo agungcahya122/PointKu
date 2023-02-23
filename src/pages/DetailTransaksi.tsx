@@ -160,7 +160,7 @@ function DetailTransaksi() {
               </div>
               <div className="flex justify-between pt-6 ">
                 <h1 className=" font-bold text-lg">Total Harga(2 Barang)</h1>
-                <p>Rp.{summary},-</p>
+                <p>Rp.{summary + discount},-</p>
               </div>
               <div className="flex justify-between border-b-2 border-gray-200 pt-3 ">
                 <h1 className=" font-bold text-lg">Diskon</h1>
@@ -168,7 +168,7 @@ function DetailTransaksi() {
               </div>
               <div className="flex justify-between pt-10 ">
                 <h1 className=" font-bold text-2xl">Total Harga(4 Barang)</h1>
-                <p>Rp.{summary - discount},-</p>
+                <p>Rp.{summary},-</p>
               </div>
               <br />
               <CustomButton
