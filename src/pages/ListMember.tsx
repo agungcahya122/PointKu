@@ -10,10 +10,7 @@ import CustomButton from "../components/CustomButton";
 import { CustomInput } from "../components/CustomInput";
 
 import withReactContent from "sweetalert2-react-content";
-import {
-  MemberIdTypes,
-  MembersTypes,
-} from "../utils/types/DataTypes";
+import { MemberIdTypes } from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
 
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
@@ -21,6 +18,17 @@ import { IoTrashOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { FaArrowCircleLeft } from "react-icons/fa";
 
+interface MembersTypes {
+  data?: Member[];
+}
+
+type Member = {
+  id?: number;
+  email?: string;
+  name?: string;
+  phone_number?: string;
+  address?: string;
+};
 const ListMember = () => {
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token"]);
@@ -28,6 +36,24 @@ const ListMember = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [customers, setCustomers] = useState<MembersTypes>({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Member[]>(
+    []
+  );
+  function handleSearch(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setSearchQuery(event.target.value);
+    const query = event.target.value.toLowerCase();
+    const filteredResults = customers.data?.filter(
+      (customer) =>
+        customer.name?.toLowerCase().includes(query) ||
+        customer.email?.toLowerCase().includes(query) ||
+        customer.phone_number?.toLowerCase().includes(query) ||
+        customer.address?.toLowerCase().includes(query)
+    );
+    setSearchResults(filteredResults ?? []);
+  }
 
   useEffect(() => {
     fetchData();
@@ -72,6 +98,8 @@ const ListMember = () => {
                 type="search"
                 placeholder="Mencari Member . . . . . ."
                 className="input input-border w-full max-w-full h-8 px-3 rounded-full placeholder-color3 bg-[#F8F5F5] text-color3 text-[16px] tracking-wider font-medium"
+                value={searchQuery}
+                onChange={handleSearch}
               />
               <MdSearch className="w-8 h-8 text-color3" />
             </div>
@@ -110,37 +138,81 @@ const ListMember = () => {
 
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)] text-[14px]">
                 <>
-                  {customers.data?.map((data, index) => (
-                    <tr key={index}>
-                      <td className="text-center">{data.id}</td>
-                      <td>{data.name}</td>
-                      <td className="text-center text-[14px]">
-                        {data.address}
-                      </td>
-                      <td>{data.phone_number}</td>
-                      <td className="text-center">
-                        {data.email}
-                      </td>
-                      <td className="flex justify-center gap-5">
-                        <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
-                          <FiEdit
-                            className="w-5 h-5"
-                            onClick={() =>
-                              navigate(`/editMember/${data.id}`)
-                            }
-                          />
-                          <p
-                            className="text-[14px] pt-1"
-                            onClick={() =>
-                              navigate(`/editMember/${data.id}`)
-                            }
-                          >
-                            Edit
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {searchQuery
+                    ? searchResults.map((data, index) => (
+                        <tr key={index}>
+                          <td className="text-center">
+                            {data.id}
+                          </td>
+                          <td>{data.name}</td>
+                          <td className="text-center text-[14px]">
+                            {data.address}
+                          </td>
+                          <td>{data.phone_number}</td>
+                          <td className="text-center">
+                            {data.email}
+                          </td>
+                          <td className="flex justify-center gap-5">
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
+                              <FiEdit
+                                className="w-5 h-5"
+                                onClick={() =>
+                                  navigate(
+                                    `/editMember/${data.id}`
+                                  )
+                                }
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={() =>
+                                  navigate(
+                                    `/editMember/${data.id}`
+                                  )
+                                }
+                              >
+                                Edit
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    : customers.data?.map((data, index) => (
+                        <tr key={index}>
+                          <td className="text-center">
+                            {data.id}
+                          </td>
+                          <td>{data.name}</td>
+                          <td className="text-center text-[14px]">
+                            {data.address}
+                          </td>
+                          <td>{data.phone_number}</td>
+                          <td className="text-center">
+                            {data.email}
+                          </td>
+                          <td className="flex justify-center gap-5">
+                            <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer ">
+                              <FiEdit
+                                className="w-5 h-5"
+                                onClick={() =>
+                                  navigate(
+                                    `/editMember/${data.id}`
+                                  )
+                                }
+                              />
+                              <p
+                                className="text-[14px] pt-1"
+                                onClick={() =>
+                                  navigate(
+                                    `/editMember/${data.id}`
+                                  )
+                                }
+                              >
+                                Edit
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                 </>
               </tbody>
             </table>
