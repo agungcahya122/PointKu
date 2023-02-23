@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  FC,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, FC, useCallback } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
@@ -50,9 +45,7 @@ const Home = () => {
   });
   const [memberId, setMemberId] = useState<number | null>(null);
   const [searchText, setSearchText] = useState<string>("");
-  const [filteredProducts, setFilteredProducts] = useState<
-    ProductsTypes[]
-  >([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductsTypes[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -162,11 +155,10 @@ const Home = () => {
     });
     setCart(_cart);
   };
+
   const filterProducts = useCallback(() => {
     const filtered = products.filter((product) =>
-      product.product_name
-        .toLowerCase()
-        .includes(searchText.toLowerCase())
+      product.product_name.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredProducts(filtered);
   }, [products, searchText]);
@@ -216,9 +208,7 @@ const Home = () => {
                       type="text"
                       placeholder="Pencarian..."
                       className="input bg-slate-200  placeholder-black w-[65%]"
-                      onChange={(e) =>
-                        setSearchText(e.target.value)
-                      }
+                      onChange={(e) => setSearchText(e.target.value)}
                     />
                   </div>
                 </div>
@@ -299,9 +289,7 @@ const Home = () => {
                   type="text"
                   placeholder="ID. Member"
                   className="input input-bordered border-1 bg-white w-6/12 "
-                  onChange={(e) =>
-                    setMemberId(parseInt(e.target.value))
-                  }
+                  onChange={(e) => setMemberId(parseInt(e.target.value))}
                 />
                 <span
                   className="bg-orangeComponent text-white"
@@ -316,9 +304,7 @@ const Home = () => {
                 <h1 className="ml-6 text-md mt-9">Sub Total</h1>
                 <h1 className="ml-6 text-md mt-2">Diskon</h1>
                 <hr className="w-10/12 border-2 border-slate-400 float-right mt-2" />
-                <h1 className="ml-6 text-md mt-6 font-bold ">
-                  Jumlah Total
-                </h1>
+                <h1 className="ml-6 text-md mt-6 font-bold ">Jumlah Total</h1>
               </div>
               <div className="flex-1">
                 <h1 className="ml-16 text-md mt-9 text-black font-semibold">
