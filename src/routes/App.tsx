@@ -96,7 +96,7 @@ function App() {
       element: <EditMember />,
     },
     {
-      path: "/detail-transaksi/:transaction_id",
+      path: "/detail-transaksi",
       element: <DetailTransaksi />,
     },
   ]);

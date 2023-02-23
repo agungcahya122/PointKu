@@ -6,11 +6,16 @@ import moment from "moment";
 import axios from "axios";
 
 import Swal from "../utils/Swal";
-import { transactionType } from "../utils/types/DataTypes";
+import {
+  ProductsTypes,
+  transactionType,
+} from "../utils/types/DataTypes";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
 import CustomButton from "../components/CustomButton";
+import localStorage from "redux-persist/es/storage";
+import productImage from "../assets/addProduct.svg";
 
 function DetailTransaksi() {
   const [datas, setDatas] = useState<transactionType>();
@@ -22,6 +27,9 @@ function DetailTransaksi() {
   const checkToken = cookies.token;
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
+  const [cart, setCart] = useState<ProductsTypes[]>([]);
+  const [summary, setSummary] = useState<number>(0);
+  const [discount, setDiscount] = useState<number>(0);
 
   useEffect(() => {
     fetchData();
@@ -30,7 +38,7 @@ function DetailTransaksi() {
   function fetchData() {
     axios
       .get(
-        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/transactions/1`,
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/transactions/${transaction_id}`,
         {
           headers: { Authorization: `Bearer ${checkToken}` },
         }
@@ -53,6 +61,31 @@ function DetailTransaksi() {
       });
   }
 
+  function handleBayar() {
+    MySwal.fire({
+      title: "Pembayaran Berhasil",
+      showCancelButton: false,
+    });
+    navigate("/home");
+  }
+
+  async function loadDataStorage() {
+    const getData = await localStorage.getItem("keranjang");
+    const cart = JSON.parse(getData || "[]");
+    setCart(cart);
+
+    const getSumary = await localStorage.getItem("summary");
+    setSummary(JSON.parse(getSumary || ""));
+
+    const getDiscount = await localStorage.getItem("discount");
+    setDiscount(JSON.parse(getDiscount || ""));
+    console.log(cart);
+  }
+
+  useEffect(() => {
+    loadDataStorage();
+  }, []);
+
   return (
     <Layout>
       <div className="flex flex-row">
@@ -64,13 +97,18 @@ function DetailTransaksi() {
                 | Detail Transaksi
               </h1>
               <br />
+
               <div className="flex justify-between ">
-                <h1 className="underline font-bold text-lg">Invoice</h1>
+                <h1 className="underline font-bold text-lg">
+                  Invoice
+                </h1>
                 <p>INV/MPL/{datas?.id}</p>
               </div>
               <br />
               <div className="flex justify-between ">
-                <h1 className="underline font-bold text-lg">Nama Pembeli</h1>
+                <h1 className="underline font-bold text-lg">
+                  Nama Pembeli
+                </h1>
                 <p>{datas?.customer_name}</p>
               </div>
               <br />
@@ -79,69 +117,90 @@ function DetailTransaksi() {
                   Tanggal Pembelian
                 </h1>
                 <p>
-                  {moment(datas?.created_at).format("DD MMMM YYYY h:mm:ss")}
+                  {moment(datas?.created_at).format(
+                    "DD MMMM YYYY h:mm:ss"
+                  )}
                 </p>
               </div>
               <br />
-              <h1 className="underline font-bold text-lg">Detail Produk</h1>
+              <h1 className="underline font-bold text-lg">
+                Detail Produk
+              </h1>
 
-              {datas?.TransactionProductRes &&
-                datas.TransactionProductRes.map((data, index) => (
-                  <div
-                    className="rounded-xl border mt-10 p-5  shadow-lg font-medium text-lg w-full"
-                    key={index}
-                  >
-                    <div className="flex">
-                      <img
-                        src={product1}
-                        alt="produk"
-                        className="w-1/5 rounded-lg"
-                      />
-                      <div className="flex flex-col font-bold">
-                        <p className="pl-3">{data.product_name}</p>
-                        <div className="flex justify-between gap-[34rem] border-b-2 border-gray-200">
-                          <p className="p-3">Jumlah Beli</p>
-                          <p>
-                            {data.quantity} x Rp.{" "}
-                            {data.price
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              {cart.map((item) => {
+                return (
+                  <>
+                    <div className="rounded-xl border mt-10 p-5  shadow-lg font-medium text-lg w-full">
+                      <div className="flex">
+                        <img
+                          src={productImage}
+                          alt="produk"
+                          className="w-1/5 rounded-lg"
+                        />
+                        <div className="flex flex-col font-bold">
+                          <p className="pl-3">
+                            {item.product_name}
+                          </p>
+                          <div className="flex justify-between gap-[34rem] border-b-2 border-gray-200">
+                            <p className="p-3">Jumlah Beli</p>
+                            <p>
+                              {item.qty} x Rp.{" "}
+                              {item.price
+                                .toString()
+                                .replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  "."
+                                )}
+                            </p>
+                          </div>
+                          <p className="self-end pt-3">
+                            Total Pembelian : Rp.{" "}
+                            {item.price *
+                              item.qty
+                                .toString()
+                                .replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  "."
+                                )}
                           </p>
                         </div>
-                        <p className="self-end pt-3">
-                          Total Pembelian : Rp.{" "}
-                          {data.total_price
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-                        </p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </>
+                );
+              })}
+
               <h1 className="underline font-bold text-lg pt-12">
                 Rincian Pembayaran
               </h1>
               <div className="flex justify-between border-b-2 border-gray-200 pt-6">
-                <h1 className=" font-bold text-lg">Metode Pembayaran</h1>
+                <h1 className=" font-bold text-lg">
+                  Metode Pembayaran
+                </h1>
                 <p>Tunai</p>
               </div>
               <div className="flex justify-between pt-6 ">
-                <h1 className=" font-bold text-lg">Total Harga(2 Barang)</h1>
-                <p>Rp.60.000</p>
+                <h1 className=" font-bold text-lg">
+                  Total Harga(2 Barang)
+                </h1>
+                <p>Rp.{summary + discount},-</p>
               </div>
               <div className="flex justify-between border-b-2 border-gray-200 pt-3 ">
                 <h1 className=" font-bold text-lg">Diskon</h1>
-                <p>-5.000</p>
+                <p>Rp.{discount}, -</p>
               </div>
               <div className="flex justify-between pt-10 ">
-                <h1 className=" font-bold text-2xl">Total Harga(4 Barang)</h1>
-                <p>Rp.60.000</p>
+                <h1 className=" font-bold text-2xl">
+                  Total Harga(4 Barang)
+                </h1>
+                <p>Rp.{summary},-</p>
               </div>
               <br />
               <CustomButton
                 id="btn-bayar"
                 className="bg-orangeComponent h-14 w-60 text-white tracking-[0.2rem] rounded-lg"
                 label="Bayar Sekarang"
+                onClick={handleBayar}
               />
             </div>
           </div>

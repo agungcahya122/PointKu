@@ -1,10 +1,12 @@
 import React, { useState, useEffect, FC, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
 import withReactContent from "sweetalert2-react-content";
 import { ProductsTypes } from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
+import { Link } from "react-router-dom";
 
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
 import LogoMie from "../assets/addProduct.svg";
@@ -15,7 +17,6 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 import { FaShoppingCart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { IoTrashOutline } from "react-icons/io5";
 
 interface CartProps {
@@ -33,6 +34,7 @@ const Home = () => {
   const [cookies, setCookies] = useCookies(["token"]);
   const checkToken = cookies.token;
   const MySwal = withReactContent(Swal);
+  const { transaction_id } = useParams();
 
   const [subPrice, setSubPrice] = useState(0);
   const [products, setProducts] = useState<ProductsTypes[]>([]);
@@ -91,6 +93,7 @@ const Home = () => {
     }
     data.qty = 1;
     setCart([...cart, data]);
+    localStorage.setItem("cartData", JSON.stringify([...cart, data]));
   };
 
   const checkMemberId = () => {
@@ -120,6 +123,8 @@ const Home = () => {
       ...prevSummary,
       total: totalPrice,
     }));
+    localStorage.setItem("summary", JSON.stringify(totalPrice));
+    localStorage.setItem("discount", JSON.stringify(summary.discount));
   }, [subPrice, summary.discount]);
 
   const handlePrice = () => {
@@ -128,6 +133,7 @@ const Home = () => {
       ans += item.qty * item.price;
     });
     setSubPrice(ans);
+    localStorage.setItem("subPrice", JSON.stringify(subPrice));
   };
 
   useEffect(() => {
@@ -167,6 +173,10 @@ const Home = () => {
   useEffect(() => {
     filterProducts();
   }, [filterProducts]);
+
+  // useEffect(() => {
+  //   localStorage.setItem("keranjang", JSON.stringify(cart));
+  // }, [cart]);
 
   return (
     <Layout>
@@ -322,12 +332,16 @@ const Home = () => {
                 </h1>
               </div>
             </div>
+
             <div className="mx-auto mt-10">
-              <CustomButton
-                id="btn-continuePayment"
-                label="Lanjutkan Pembayaran"
-                className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
-              />
+              <Link to="/detail-transaksi">
+                <CustomButton
+                  id="btn-continuePayment"
+                  label="Lanjutkan Pembayaran"
+                  className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
+                  // onClick={navigate(`detail-transaksi/1`)}
+                />
+              </Link>
             </div>
           </div>
         </div>
@@ -345,6 +359,33 @@ const CardKeranjang: FC<CartProps> = ({
   DecProduct,
   DelProduct,
 }) => {
+  useEffect(() => {
+    localStorage.setItem("price", JSON.stringify(price));
+  }, [price]);
+  // const [cart, setCart] = useState<ProductsTypes[]>([]);
+  // const [count, setCount] = useState<number>(1);
+  // const [priceTotal, setPriceTotal] = useState<any>();
+
+  // function addCart() {
+  //   setCount((prevState) => prevState + 1);
+  // }
+
+  // function minCart() {
+  //   setCount((count) => count - 1);
+  // }
+
+  // const subPrice = price * count;
+
+  // useEffect(() => {
+  //   setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
+  // }, [priceTotal, count]);
+
+  // useEffect(() => {
+  //   for (const item of cart) {
+  //     localStorage.setItem("quantity", JSON.stringify((item.qty = count)));
+  //     console.log(item.qty);
+  //   }
+  // }, [cart, count]);
   return (
     <>
       <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">
