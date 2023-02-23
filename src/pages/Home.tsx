@@ -50,13 +50,19 @@ const Home = () => {
       )
       .then((res) => {
         setProducts(res.data);
+
+        // let babi = async () => {
+        //   babi = res.data.data;
+        // };
       })
+
       .catch((err) => {
         alert(err.toString());
       })
       .finally(() => setLoading(false));
   }
 
+  const [babi, setBabi] = useState();
   const [cart, setCart] = useState<ProductsTypes[]>([]);
 
   const handleCart = (data: ProductsTypes) => {
@@ -78,6 +84,12 @@ const Home = () => {
     setCart([...cart, data]);
   };
 
+  for (const item of cart) {
+    item.qty = 1;
+  }
+
+  // console.log(cart);
+
   // function handleCart(data: ProductsTypes) {
   //   const checkExist = localStorage.getItem("AddtoCart");
   //   if (checkExist) {
@@ -90,22 +102,18 @@ const Home = () => {
   //   }
   // }
 
-  const [count, setCount] = useState([1, 1]);
-  const [keranjang, setKeranjang] = useState<ProductsTypes[]>([]);
+  // useEffect(() => {
+  //   fetchCart();
+  // }, []);
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const fetchCart = useCallback(() => {
-    // setLoading(true);
-    const getProduct = localStorage.getItem("AddtoCart");
-    if (getProduct) {
-      setProducts(JSON.parse(getProduct));
-      // console.log(JSON.parse(getProduct));
-    }
-    // setLoading(false);
-  }, []);
+  // const fetchCart = useCallback(() => {
+  //   setLoading(true);
+  //   const getProduct = localStorage.getItem("AddtoCart");
+  //   if (getProduct) {
+  //     setProducts(JSON.parse(getProduct));
+  //   }
+  //   setLoading(false);
+  // }, []);
 
   // function addProduct() {
   //   setCount((prevState) => prevState + 1);
@@ -114,15 +122,16 @@ const Home = () => {
   // function decProduct() {
   //   setCount((count) => count - 1);
   // }
-  function addProduct(index: number) {
-    count[index] = count[index]++;
-    // setCount(count[index]);
-  }
 
-  function decProduct(index: number) {
-    count[index] = count[index]--;
-    // setCount((count) => count - 1);
-  }
+  // function addProduct(index: number) {
+  //   count[index] = count[index]++;
+  //   // setCount(count[index]);
+  // }
+
+  // function decProduct(index: number) {
+  //   count[index] = count[index]--;
+  //   // setCount((count) => count - 1);
+  // }
 
   // console.log(count);
 
@@ -130,12 +139,12 @@ const Home = () => {
 
   function handlePrice() {
     let ans = 0;
-    {
-      cart.map((item) => {
-        console;
-      });
-    }
+    cart.map((item) => {});
   }
+
+  cart.map((item) => {
+    console.log(item.price);
+  });
 
   useEffect(() => {
     handlePrice();
@@ -239,10 +248,10 @@ const Home = () => {
                         price={data.price}
                         qty={data.qty}
                         AddProduct={() => {
-                          addProduct(index);
+                          // addProduct();
                         }}
                         DecProduct={() => {
-                          decProduct(index);
+                          // decProduct();
                         }}
                       />
                     ))}
