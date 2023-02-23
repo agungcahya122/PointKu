@@ -19,10 +19,6 @@ export interface productData {
   supplier?: string;
 }
 
-export interface MembersTypes {
-  data?: Member[];
-}
-
 export interface MemberIdTypes {
   email?: string;
   name?: string;
