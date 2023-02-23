@@ -55,7 +55,6 @@ const Card: FC<CardProps> = ({
             />
           </div>
           <p className="text-lg text-slate-400 mt-4 font-semibold">{`Stok : ${stock}`}</p>
-          <p>{qty}</p>
         </div>
       </div>
     </>

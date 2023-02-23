@@ -104,7 +104,7 @@ type ProductType = {
   product_name: string;
   minimum_stock: number;
   stock: number;
-  qty: 0;
+  qty: any;
   buying_price: number;
   price: number;
   product_image: string;
