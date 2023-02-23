@@ -86,14 +86,9 @@ const Home = () => {
       });
       return;
     }
-
     data.qty = 1;
     setCart([...cart, data]);
   };
-
-  // for (const item of cart) {
-  //   item.qty = 1;
-  // }
 
   const checkMemberId = () => {
     axios
