@@ -84,6 +84,7 @@ const Home = () => {
       return;
     }
     setCart([...cart, data]);
+    localStorage.setItem("cartData", JSON.stringify([...cart, data]));
   };
 
   for (const item of cart) {
@@ -144,10 +145,6 @@ const Home = () => {
     });
     setSubPrice(ans);
   };
-
-  useEffect(() => {
-    handlePrice();
-  });
 
   return (
     <Layout>
@@ -316,14 +313,7 @@ const Home = () => {
   );
 };
 
-const CardKeranjang: FC<CartProps> = ({
-  id,
-  prodcut_name,
-  price,
-  qty,
-  AddProduct,
-  DecProduct,
-}) => {
+const CardKeranjang: FC<CartProps> = ({ id, prodcut_name, price, qty }) => {
   const [cart, setCart] = useState<ProductsTypes[]>([]);
   const [count, setCount] = useState<number>(1);
   const [priceTotal, setPriceTotal] = useState<any>();
