@@ -142,7 +142,7 @@ const Home = () => {
   }, []);
 
   {
-    products.data?.map((item, index) => console.log(item));
+    products.data?.map((item, index) => console.log(item.qty));
   }
 
   return (
@@ -196,7 +196,7 @@ const Home = () => {
               <div className="grid grid-cols-3 gap-2">
                 {products.data?.map((data, index) => (
                   <Card
-                    key={data.id}
+                    key={index}
                     id={data.id}
                     product_name={data.product_name}
                     stock={data.stock}
