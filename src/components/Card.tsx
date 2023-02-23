@@ -31,30 +31,29 @@ const Card: FC<CardProps> = ({
 }) => {
   return (
     <>
-      <div className="card w-11/12 bg-bgCard ">
-        <figure className="p-6">
+      <div className="card w-11/12 bg-bgCard shadow-[0px_1px_2px_0px_rgba(69,69,69,0.5)]">
+        <figure className="p-4">
           <img
             src={product_image}
             alt="logo.svg"
             className="rounded-xl shadow-lg"
           />
         </figure>
-        <div className="card-body items-center text-center">
-          <h1 className="card-title text-black font-poppins font-bold -mt-7 text-xl">
+
+        <div className="card-body items-center text-center p-2">
+          <h1 className="card-title text-color3 capitalize font-bold text-[20px]">
             {product_name}
           </h1>
-          <h2 className="card-title text-black font-poppins font-bold text-xl">
-            {`Rp.${price}`}
-          </h2>
+          <h2 className="card-title text-color3 font-medium text-[18px] -mt-1">{`Rp.${price}`}</h2>
           <div className="card-actions">
             <CustomButton
               id="btn-card"
               label="Tambah ke Keranjang"
-              className="px-8 rounded-xl text-white py-3 bg-orangeComponent mt-4 hover:bg-orange-900"
+              className="px-4 mt-2 rounded-xl text-[16px] font-medium text-color1 py-2 bg-orangeComponent hover:bg-orange-600"
               onClick={onClickCart}
             />
           </div>
-          <p className="text-lg text-slate-400 mt-4 font-semibold">{`Stok : ${stock}`}</p>
+          <p className="text-[16px] text-color4 mt-1 pb-4 font-semibold">{`Stok : ${stock}`}</p>
         </div>
       </div>
     </>

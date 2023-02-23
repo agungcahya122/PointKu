@@ -16,6 +16,7 @@ import Card from "../components/Card";
 
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { IoTrashOutline } from "react-icons/io5";
 
 interface CartProps {
   id?: number;
@@ -170,7 +171,7 @@ const Home = () => {
   return (
     <Layout>
       <div className="flex flex-row">
-        <div className="flex w-[20%] min-h-screen">
+        <div className="flex w-[17rem] min-h-screen ">
           <SideNav />
         </div>
 
@@ -178,11 +179,11 @@ const Home = () => {
           <div className="flex flex-col w-full">
             <div className="flex flex-row h-[8rem] mt-10">
               <div className="flex-1 ">
-                <h1 className="text-2xl font-poppins text-black font-bold mt-7 ml-8">
+                <h1 className="text-[28px] font-poppins text-black font-bold mt-7 ml-8">
                   Selamat Datang,
                 </h1>
                 <p className="mt-3 text-gray-400 text-lg ml-8">
-                  Temukan, yang kamu butuhkan
+                  Temukan yang kamu butuhkan disini.
                 </p>
               </div>
               <div className="flex-1">
@@ -215,7 +216,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="w-full min-h-screen mt-10 ml-3">
+            <div className="w-full min-h-screen mt-12 ml-6">
               <div className="grid grid-cols-3 gap-2">
                 {searchText !== ""
                   ? filteredProducts.map((data, index) => (
@@ -299,22 +300,24 @@ const Home = () => {
                 </span>
               </label>
             </div>
-            <div className="w-11/12 h-[15rem] bg-gray-200 mx-auto rounded-xl mt-10 flex flex-row">
-              <div className="flex-1 ">
-                <h1 className="ml-6 text-md mt-9">Sub Total</h1>
-                <h1 className="ml-6 text-md mt-2">Diskon</h1>
-                <hr className="w-10/12 border-2 border-slate-400 float-right mt-2" />
-                <h1 className="ml-6 text-md mt-6 font-bold ">Jumlah Total</h1>
+
+            <div className="w-11/12 py-10 bg-gray-200 rounded-xl mt-10 mx-auto flex flex-row">
+              <div className="flex-1 text-[16px]">
+                <h1 className="ml-6 ">Sub Total</h1>
+                <h1 className="ml-6 mt-2">Diskon</h1>
+                <hr className="w-10/12 border-2 border-slate-400 float-right mt-4" />
+                <h1 className="ml-6  mt-6 font-bold ">Jumlah Total</h1>
               </div>
-              <div className="flex-1">
-                <h1 className="ml-16 text-md mt-9 text-black font-semibold">
+
+              <div className="flex-1 text-[16px]">
+                <h1 className="ml-8 text-color3 font-semibold">
                   {`Rp.${subPrice}`}
                 </h1>
-                <h1 className="ml-16 text-md mt-2 text-black font-semibold">
+                <h1 className="ml-8  mt-2 text-color3 font-semibold">
                   {`Rp.${summary.discount}`}
                 </h1>
-                <hr className="w-10/12 border-2  border-slate-400 float-left mt-2" />
-                <h1 className="ml-16 text-md mt-6 text-black font-bold">
+                <hr className="w-10/12 border-2  border-slate-400 float-left mt-4" />
+                <h1 className="ml-8 mt-9 text-color3 font-bold">
                   {`Rp.${summary.total}`}
                 </h1>
               </div>
@@ -342,50 +345,26 @@ const CardKeranjang: FC<CartProps> = ({
   DecProduct,
   DelProduct,
 }) => {
-  const [cart, setCart] = useState<ProductsTypes[]>([]);
-  const [count, setCount] = useState<number>(1);
-  const [priceTotal, setPriceTotal] = useState<any>();
-
-  function addCart() {
-    setCount((prevState) => prevState + 1);
-  }
-
-  function minCart() {
-    setCount((count) => count - 1);
-  }
-
-  // const subPrice = price * count;
-
-  // useEffect(() => {
-  //   setPriceTotal(localStorage.setItem("subPrice", JSON.stringify(subPrice)));
-  // }, [priceTotal, count]);
-
-  // useEffect(() => {
-  //   for (const item of cart) {
-  //     localStorage.setItem("quantity", JSON.stringify((item.qty = count)));
-  //     console.log(item.qty);
-  //   }
-  // }, [cart, count]);
   return (
     <>
       <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">
         <div className=" w-[30%]">
           <img src={LogoMie} className="rounded-lg shadow-md" />
         </div>
-        <div className=" w-[70%] ">
-          <h1 className="text-lgtext-black font-poppins font-semibold ml-3">
+        <div className=" w-[70%] ml-2">
+          <h1 className="text-[16px] capitalize text-color3 font-semibold">
             {prodcut_name}
           </h1>
-          <div className="flex flex-row justify-between">
-            <h2 className="text-lg text-black mt-2 ml-3">{`Rp.${price}`}</h2>
-            <div className="flex flex-row mr-2 mt-2">
+          <div className="flex flex-row justify-between mt-1 items-center">
+            <h2 className="text-[18px] font-semibold text-color3 mt-1 mr-2 align- bottom">{`Rp.${price}`}</h2>
+            <div className="flex flex-row">
               <CustomButton
                 id="btn-add"
                 label="+"
                 onClick={AddProduct}
-                className="text-white bg-orangeComponent h-[1.5rem] px-2 rounded-lg mr-2"
+                className="text-white bg-orangeComponent px-2 rounded-lg mr-2"
               />
-              <p className=" text-md text-black ">{qty}</p>
+              <p className=" text-[16px] text-color3 ">{qty}</p>
               {qty === 1 ? (
                 <CustomButton
                   id="btn-add"
@@ -403,7 +382,12 @@ const CardKeranjang: FC<CartProps> = ({
               )}
             </div>
           </div>
-          <p onClick={DelProduct}>delete</p>
+          <div className="flex items-center mt-1 gap-1">
+            <IoTrashOutline className="text-red-500" />
+            <p className="text-[14px] text-red-500" onClick={DelProduct}>
+              delete
+            </p>
+          </div>
         </div>
       </div>
     </>

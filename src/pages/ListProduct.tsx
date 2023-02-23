@@ -97,10 +97,10 @@ const ListProduct = () => {
   return (
     <Layout>
       <div className="grid grid-cols-12">
-        <div className="col-span-3">
+        <div className="col-span-3 ">
           <SideNav />
         </div>
-        <div className="col-span-9 px-10 pt-16">
+        <div className="col-span-9 -ml-10 pr-10 pt-16">
           {/* <div className="flex justify-center ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
             <MdOutlineShoppingCart className="w-6 h-6 text-color3" />
           </div> */}
@@ -156,11 +156,11 @@ const ListProduct = () => {
                   {search !== ""
                     ? filter.map((item, index) => (
                         <tr key={item.id}>
-                          <td>{index + 1}</td>
+                          <td className="text-center">{index + 1}</td>
                           <td>{item.product_name}</td>
-                          <td>{item.category}</td>
+                          <td className="text-center">{item.category}</td>
                           <td>{item.price}</td>
-                          <td>{item.stock}</td>
+                          <td className="text-center">{item.stock}</td>
                           <td className="flex justify-center gap-5">
                             <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
                               <IoTrashOutline
@@ -192,11 +192,11 @@ const ListProduct = () => {
                       ))
                     : data.map((item, index) => (
                         <tr key={item.id}>
-                          <td>{index + 1}</td>
+                          <td className="text-center">{index + 1}</td>
                           <td>{item.product_name}</td>
-                          <td>{item.category}</td>
+                          <td className="text-center">{item.category}</td>
                           <td>{item.price}</td>
-                          <td>{item.stock}</td>
+                          <td className="text-center">{item.stock}</td>
                           <td className="flex justify-center gap-5">
                             <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
                               <IoTrashOutline

@@ -52,7 +52,7 @@ const ComponentPrint: FC<componentPrint> = ({ content }) => {
   return (
     <div>
       <ComponentToPrint content={<LaporanPenjualan />} ref={contentRef} />
-      <div className="mt-10 ml-10">
+      <div className="mt-10 ml-0">
         <PrintButton contentRef={contentRef} />
       </div>
     </div>
@@ -108,7 +108,7 @@ const LaporanPenjualan = () => {
 
   return (
     <>
-      <div className="col-span-9 px-10 pt-16">
+      <div className="col-span-9 pr-10 pt-16">
         {/* <div className="flex justify-center ml-auto items-center cursor-pointer w-12 h-12 rounded-xl border-2 bg-white shadow-sm border-[rgba(159,159,159,0.5)]">
             <MdOutlineShoppingCart className="w-6 h-6 text-color3" />
           </div> */}
@@ -129,7 +129,7 @@ const LaporanPenjualan = () => {
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
-          <div className="flex w-4/12 items-center gap-4">
+          <div className="flex w-6/12 items-center gap-4">
             <p className="text-[16px] text-color3 font-medium">
               Hingga tanggal :
             </p>
@@ -152,7 +152,9 @@ const LaporanPenjualan = () => {
         </div>
         {reports.length === 0 ? (
           <>
-            <p>Data Kosong</p>
+            <p className="mt-10 mb-20 text-[20px] text-color3 font-semibold">
+              Data Kosong
+            </p>
           </>
         ) : (
           <>
@@ -223,7 +225,7 @@ const Report = () => {
         <div className="col-span-3">
           <SideNav />
         </div>
-        <div className="col-span-9  pt-16">
+        <div className="col-span-9 -ml-8 pr-5">
           <ComponentPrint />
         </div>
       </div>
