@@ -41,7 +41,7 @@ export interface ProductsTypes {
   price?: number;
   product_image?: string;
   supplier?: string;
-  qty?: 0;
+  qty?: number;
   data?: ProductType[];
 }
 
