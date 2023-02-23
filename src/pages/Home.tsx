@@ -32,8 +32,15 @@ const Home = () => {
   const checkToken = cookies.token;
   const MySwal = withReactContent(Swal);
 
-  const [products, setProducts] = useState<ProductsTypes>({});
+  const [products, setProducts] = useState<ProductsTypes[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [summary, setSummary] = useState({
+    customer_id: -1,
+    sub_total: 0,
+    discount: 0,
+    total: 0,
+  });
 
   useEffect(() => {
     fetchData();
@@ -49,11 +56,7 @@ const Home = () => {
         }
       )
       .then((res) => {
-        setProducts(res.data);
-
-        // let babi = async () => {
-        //   babi = res.data.data;
-        // };
+        setProducts(res.data.data);
       })
 
       .catch((err) => {
@@ -62,7 +65,6 @@ const Home = () => {
       .finally(() => setLoading(false));
   }
 
-  const [babi, setBabi] = useState();
   const [cart, setCart] = useState<ProductsTypes[]>([]);
 
   const handleCart = (data: ProductsTypes) => {
@@ -133,22 +135,19 @@ const Home = () => {
   //   // setCount((count) => count - 1);
   // }
 
-  // console.log(count);
+  const [subPrice, setSubPrice] = useState(0);
 
-  const [price, setPrice] = useState(0);
-
-  function handlePrice() {
+  const handlePrice = () => {
     let ans = 0;
-    cart.map((item) => {});
-  }
-
-  cart.map((item) => {
-    console.log(item.price);
-  });
+    cart.map((item) => {
+      ans += item.qty * item.price;
+    });
+    setSubPrice(ans);
+  };
 
   useEffect(() => {
     handlePrice();
-  }, []);
+  });
 
   return (
     <Layout>
@@ -167,7 +166,9 @@ const Home = () => {
                 <p className="mt-3 text-gray-400 text-lg ml-8">
                   Temukan, yang kamu butuhkan
                 </p>
-                <p>{cart.length}</p>
+                {cart?.map((item, index) => (
+                  <p key={index}>{item.price * item.qty}</p>
+                ))}
               </div>
               <div className="flex-1">
                 <div className="form-control ">
@@ -197,9 +198,10 @@ const Home = () => {
                 </div>
               </div>
             </div>
+
             <div className="w-full min-h-screen mt-10 ml-3">
               <div className="grid grid-cols-3 gap-2">
-                {products.data?.map((data, index) => (
+                {products.map((data, index) => (
                   <Card
                     key={data.id}
                     id={data.id}
@@ -267,20 +269,18 @@ const Home = () => {
             </div>
             <div className="w-11/12 h-[15rem] bg-gray-200 mx-auto rounded-xl mt-10 flex flex-row">
               <div className="flex-1 ">
-                <h1 className="ml-6 text-md mt-9">Subtotal</h1>
+                <h1 className="ml-6 text-md mt-9">Sub Total</h1>
                 <h1 className="ml-6 text-md mt-2">Diskon</h1>
-                {/* <h1 className="ml-6 text-md mt-2">Total Pajak</h1> */}
                 <hr className="w-10/12 border-2 border-slate-400 float-right mt-2" />
                 <h1 className="ml-6 text-md mt-6 font-bold ">Jumlah Total</h1>
               </div>
               <div className="flex-1">
                 <h1 className="ml-16 text-md mt-9 text-black font-semibold">
-                  $20
+                  {`Rp.${subPrice}`}
                 </h1>
                 <h1 className="ml-16 text-md mt-2 text-black font-semibold">
                   -$5
                 </h1>
-                {/* <h1 className="ml-16 text-md mt-2 text-black font-semibold">-$5</h1> */}
                 <hr className="w-10/12 border-2  border-slate-400 float-left mt-2" />
                 <h1 className="ml-16 text-md mt-6 text-black font-bold">$10</h1>
               </div>
@@ -324,15 +324,6 @@ const CardKeranjang: FC<CartProps> = ({
   AddProduct,
   DecProduct,
 }) => {
-  // const [count, setCount] = useState<number>(1);
-
-  // function addProduct() {
-  //   setCount((prevState) => prevState + 1);
-  // }
-
-  // function decProduct() {
-  //   setCount((count) => count - 1);
-  // }
   return (
     <>
       <div className="flex flex-row h-[6rem] items-center justify-center mt-8 p-3 w-[90%] bg-bgCard mx-auto rounded-xl">
