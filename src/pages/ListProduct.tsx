@@ -35,12 +35,11 @@ const ListProduct = () => {
   const fetchData = () => {
     axios
       .get(
-        "https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products",
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products`,
         {
           headers: {
             Authorization: `Bearer ${checkToken}`,
           },
-          params: {},
         }
       )
       .then((res) => {
@@ -151,7 +150,7 @@ const ListProduct = () => {
               <tbody className="border-x-2 border-[rgba(159,159,159,0.2)]">
                 <>
                   {search !== ""
-                    ? filter.map((item, index) => (
+                    ? filter?.map((item, index) => (
                         <tr key={item.id}>
                           <td className="text-center">{index + 1}</td>
                           <td>{item.product_name}</td>
@@ -175,11 +174,15 @@ const ListProduct = () => {
                             <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
                               <FiEdit
                                 className="w-5 h-5"
-                                onClick={onClickEdit}
+                                onClick={() =>
+                                  navigate(`/editProduct/${item.id}`)
+                                }
                               />
                               <p
                                 className="text-[14px] pt-1"
-                                onClick={onClickEdit}
+                                onClick={() =>
+                                  navigate(`/editProduct/${item.id}`)
+                                }
                               >
                                 Edit
                               </p>
@@ -187,7 +190,7 @@ const ListProduct = () => {
                           </td>
                         </tr>
                       ))
-                    : data.map((item, index) => (
+                    : data?.map((item, index) => (
                         <tr key={item.id}>
                           <td className="text-center">{index + 1}</td>
                           <td>{item.product_name}</td>

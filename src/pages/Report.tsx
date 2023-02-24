@@ -214,8 +214,6 @@ const LaporanPenjualan = () => {
 };
 
 const Report = () => {
-  const navigate = useNavigate();
-
   return (
     <Layout>
       <div className="grid grid-cols-12">
