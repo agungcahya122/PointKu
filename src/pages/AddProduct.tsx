@@ -67,8 +67,6 @@ const AddProduct = () => {
         const { message } = res.data;
         setDataProduct((prevDatas) => [...prevDatas, body]);
         localStorage.setItem("dataProduct", JSON.stringify(dataProduct));
-        // setDataProduct(JSON.parse(localStorage.getItem("dataProduct") || ""));
-        console.log(body);
 
         MySwal.fire({
           title: "Berhasil Menambahkan Data Product",

@@ -78,7 +78,6 @@ const Home = () => {
   const handleCart = (data: ProductsTypes) => {
     let isPresent = false;
     cart.forEach((item) => {
-      // item.qty = 1;
       if (data.id === item.id) {
         isPresent = true;
       }
@@ -335,7 +334,6 @@ const Home = () => {
                   id="btn-continuePayment"
                   label="Lanjutkan Pembayaran"
                   className="py-3 bg-orangeComponent text-white px-6 rounded-2xl hover:bg-orange-700"
-                  // onClick={navigate(`detail-transaksi/1`)}
                 />
               </Link>
             </div>
