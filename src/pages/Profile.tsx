@@ -44,7 +44,7 @@ function Profile() {
         }
       )
       .then((user) => {
-        const { data } = user.data;
+        const { data } = user.data.data;
         setUser(data);
       })
       .catch((err) => {
@@ -81,7 +81,7 @@ function Profile() {
             removeCookie("id");
             removeCookie("business_name");
             removeCookie("email");
-            navigate("/");
+            navigate("/profile/:id");
           })
           .catch((err) => {
             MySwal.fire({
@@ -256,7 +256,7 @@ function EditProfile() {
           <div className="flex flex-col w-full overflow-hidden ">
             <div className="flex flex-row h-[8rem] mt-10 ">
               <div className="flex w-[40%] mt-10">
-                <Link to="/profile">
+                <Link to="/profile/:id">
                   <CustomButton
                     id="btn-kembaliProfil"
                     icon={<FaArrowCircleLeft className="mr-5 mt-1" />}

@@ -46,7 +46,7 @@ const Login = () => {
       )
       .then((res) => {
         const { data, message } = res.data;
-        localStorage.setItem("token", JSON.stringify(data.token));
+
         setCookie("token", res.data.data.token, { path: "/" });
 
         dispatch(handleAuth(true));

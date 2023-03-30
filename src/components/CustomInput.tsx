@@ -54,7 +54,7 @@ export const TextArea: FC<TextAreaProps> = ({
       <label>{label}</label>
       <textarea
         id={id}
-        className="textarea"
+        className="textarea textarea-bordered"
         placeholder={placeholder}
         value={value}
         onChange={onChange}

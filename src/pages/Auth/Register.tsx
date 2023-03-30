@@ -38,11 +38,11 @@ const Register = () => {
     e.preventDefault();
     const formData = new FormData();
     const body = {
-      namaToko,
+      business_name: namaToko,
       email,
       password,
-      telepon,
-      alamat,
+      phone_number: telepon,
+      address: alamat,
     };
 
     axios

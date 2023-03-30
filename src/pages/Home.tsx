@@ -8,7 +8,6 @@ import { ProductsTypes } from "../utils/types/DataTypes";
 import Swal from "../utils/Swal";
 import { Link } from "react-router-dom";
 
-import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
 import LogoMie from "../assets/addProduct.svg";
 
 import CustomButton from "../components/CustomButton";
@@ -90,7 +89,7 @@ const Home = () => {
       });
       return;
     }
-    data.qty = 1;
+    data["qty"] = 1;
     setCart([...cart, data]);
     localStorage.setItem("cartData", JSON.stringify([...cart, data]));
   };
@@ -151,6 +150,7 @@ const Home = () => {
         : item;
     });
     setCart(_cart);
+    localStorage.setItem("cartLast", JSON.stringify(cart));
   };
 
   const handleDec = (data: ProductsTypes, index: any) => {
