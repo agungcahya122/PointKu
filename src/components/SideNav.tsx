@@ -22,9 +22,8 @@ export default function SideNav() {
   const [responseToken, setResponseToken] = useState<any>("");
 
   const handleLogout = () => {
-    const remove = localStorage.removeItem("token");
+ localStorage.removeItem("token");
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    setResponseToken(remove);
     Swal.fire({
       title: "Berhasil Logout",
       text: "User Logout",

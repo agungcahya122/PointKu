@@ -75,26 +75,6 @@ const Home = () => {
 
   const [cart, setCart] = useState<ProductsTypes[]>([]);
 
-  const handleCart = (data: ProductsTypes) => {
-    let isPresent = false;
-    cart.forEach((item) => {
-      if (data.id === item.id) {
-        isPresent = true;
-      }
-    });
-    if (isPresent) {
-      MySwal.fire({
-        title: "Produk Sudah Dipilih",
-        text: "Pilihlah Produk yang Lainnya",
-        showCancelButton: false,
-      });
-      return;
-    }
-    data.qty = 1;
-    setCart([...cart, data]);
-    localStorage.setItem("cartData", JSON.stringify([...cart, data]));
-  };
-
   const checkMemberId = () => {
     axios
       .get(
@@ -126,13 +106,32 @@ const Home = () => {
     localStorage.setItem("discount", JSON.stringify(summary.discount));
   }, [subPrice, summary.discount]);
 
+  const handleCart = (data: ProductsTypes) => {
+    let isPresent = false;
+    const updatedCart = cart.map((item) => {
+      if (data.id === item.id) {
+        isPresent = true;
+        return { ...item, qty: item.qty + 1 };
+      }
+      return item;
+    });
+
+    if (!isPresent) {
+      data.qty = 1;
+      updatedCart.push(data);
+    }
+
+    setCart(updatedCart);
+    localStorage.setItem("keranjang", JSON.stringify(updatedCart));
+  };
+
   const handlePrice = () => {
     let ans = 0;
-    cart.map((item) => {
+    cart.forEach((item) => {
       ans += item.qty * item.price;
     });
     setSubPrice(ans);
-    localStorage.setItem("subPrice", JSON.stringify(subPrice));
+    localStorage.setItem("subPrice", JSON.stringify(ans));
   };
 
   useEffect(() => {
@@ -145,21 +144,23 @@ const Home = () => {
   };
 
   const handleAdd = (data: ProductsTypes, index: any) => {
-    let _cart = cart.map((item, index) => {
-      return item.id === data.id
-        ? { ...item, qty: (item.qty = item.qty + 1) }
-        : item;
+    const updatedCart = cart.map((item, idx) => {
+      if (index === idx) {
+        return { ...item, qty: item.qty + 1 };
+      }
+      return item;
     });
-    setCart(_cart);
+    setCart(updatedCart);
   };
 
   const handleDec = (data: ProductsTypes, index: any) => {
-    let _cart = cart.map((item, index) => {
-      return item.id === data.id
-        ? { ...item, qty: (item.qty = item.qty - 1) }
-        : item;
+    const updatedCart = cart.map((item, idx) => {
+      if (index === idx) {
+        return { ...item, qty: item.qty - 1 };
+      }
+      return item;
     });
-    setCart(_cart);
+    setCart(updatedCart);
   };
 
   const filterProducts = useCallback(() => {
@@ -223,29 +224,30 @@ const Home = () => {
 
             <div className="w-full min-h-screen mt-12 ml-6">
               <div className="grid grid-cols-3 gap-2">
+
                 {searchText !== ""
                   ? filteredProducts.map((data, index) => (
-                      <Card
-                        key={data.id}
-                        id={data.id}
-                        product_name={data.product_name}
-                        stock={data.stock}
-                        price={data.price}
-                        product_image={LogoMie}
-                        onClickCart={() => handleCart(data)}
-                      />
-                    ))
+                    <Card
+                      key={data.id}
+                      id={data.id}
+                      product_name={data.product_name}
+                      stock={data.stock}
+                      price={data.price}
+                      product_image={LogoMie}
+                      onClickCart={() => handleCart(data)}
+                    />
+                  ))
                   : products.map((data, index) => (
-                      <Card
-                        key={data.id}
-                        id={data.id}
-                        product_name={data.product_name}
-                        stock={data.stock}
-                        price={data.price}
-                        product_image={LogoMie}
-                        onClickCart={() => handleCart(data)}
-                      />
-                    ))}
+                    <Card
+                      key={data.id}
+                      id={data.id}
+                      product_name={data.product_name}
+                      stock={data.stock}
+                      price={data.price}
+                      product_image={LogoMie}
+                      onClickCart={() => handleCart(data)}
+                    />
+                  ))}
               </div>
             </div>
             <CustomButton

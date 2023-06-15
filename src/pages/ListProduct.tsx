@@ -56,10 +56,10 @@ const ListProduct = () => {
     fetchData();
   }, []);
 
-  const handleDeleteProduct = async (data: ProductsTypes[]) => {
+  const handleDeleteProduct = async (id: number) => {
     axios
       .delete(
-        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products/${product_id}`,
+        `https://virtserver.swaggerhub.com/CAPSTONE-Group1/sirloinPOSAPI/1.0.0/products/${id}`,
         {
           headers: {
             Authorization: `Bearer ${checkToken}`,
@@ -161,11 +161,11 @@ const ListProduct = () => {
                             <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
                               <IoTrashOutline
                                 className="w-5 h-5"
-                                onClick={() => handleDeleteProduct(data)}
+                                onClick={() => handleDeleteProduct(item.id)}
                               />
                               <p
                                 className="text-[14px] pt-1"
-                                onClick={() => handleDeleteProduct(data)}
+                                onClick={() => handleDeleteProduct(item.id)}
                               >
                                 Hapus
                               </p>
@@ -201,11 +201,11 @@ const ListProduct = () => {
                             <div className="flex flex-row items-center justify-center gap-1 text-[#DA5C53] hover:cursor-pointer">
                               <IoTrashOutline
                                 className="w-5 h-5"
-                                onClick={() => handleDeleteProduct(data)}
+                                onClick={() => handleDeleteProduct(item.id)}
                               />
                               <p
                                 className="text-[14px] pt-1"
-                                onClick={() => handleDeleteProduct(data)}
+                                onClick={() => handleDeleteProduct(item.id)}
                               >
                                 Hapus
                               </p>
@@ -214,11 +214,15 @@ const ListProduct = () => {
                             <div className="flex flex-row items-center justify-center gap-1 text-[#306D75] hover:cursor-pointer">
                               <FiEdit
                                 className="w-5 h-5"
-                                onClick={onClickEdit}
+                                onClick={() =>
+                                  navigate(`/editProduct/${item.id}`)
+                                }
                               />
                               <p
                                 className="text-[14px] pt-1"
-                                onClick={onClickEdit}
+                                onClick={() =>
+                                  navigate(`/editProduct/${item.id}`)
+                                }
                               >
                                 Edit
                               </p>

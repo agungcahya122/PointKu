@@ -23,8 +23,6 @@ const EditProduk = () => {
   const [data, setData] = useState<productData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [editProduct, setEditProduct] = useState<productData>({});
-  const { product_id } = useParams();
-  console.log(product_id);
   const [upc, setUpc] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [product_name, setProductName] = useState<string>("");
@@ -47,7 +45,7 @@ const EditProduk = () => {
           headers: {
             Authorization: `Bearer ${checkToken}`,
           },
-          params: {},
+         
         }
       )
       .then((res) => {

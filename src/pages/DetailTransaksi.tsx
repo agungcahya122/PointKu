@@ -6,7 +6,10 @@ import moment from "moment";
 import axios from "axios";
 
 import Swal from "../utils/Swal";
-import { ProductsTypes, transactionType } from "../utils/types/DataTypes";
+import {
+  ProductsTypes,
+  transactionType,
+} from "../utils/types/DataTypes";
 import Layout from "../components/Layout";
 import SideNav from "../components/SideNav";
 import product1 from "../assets/nik-IvREkzD580Q-unsplash.webp";
@@ -44,10 +47,12 @@ function DetailTransaksi() {
         const { data } = customer.data;
         setDatas(data);
         let sum = 0;
-        data.TransactionProductRes.forEach((item: any) => {
-          sum += item.quantity;
+        data?.products.map((product: ProductsTypes) => {
+          sum += product.qty * product.price;
         });
-        setTotal_quantity(sum);
+        setSummary(sum);
+        setCart(data?.products);
+        setTotal_quantity(data?.products.length || 0);
       })
       .catch((error) => {
         MySwal.fire({
@@ -81,7 +86,7 @@ function DetailTransaksi() {
   useEffect(() => {
     loadDataStorage();
   }, []);
-
+  console.log(cart);
   return (
     <Layout>
       <div className="flex flex-row">
@@ -98,12 +103,16 @@ function DetailTransaksi() {
               <br />
 
               <div className="flex justify-between ">
-                <h1 className="underline font-bold text-lg">Invoice</h1>
+                <h1 className="underline font-bold text-lg">
+                  Invoice
+                </h1>
                 <p>INV/MPL/{datas?.id}</p>
               </div>
               <br />
               <div className="flex justify-between ">
-                <h1 className="underline font-bold text-lg">Nama Pembeli</h1>
+                <h1 className="underline font-bold text-lg">
+                  Nama Pembeli
+                </h1>
                 <p>{datas?.customer_name}</p>
               </div>
               <br />
@@ -112,13 +121,17 @@ function DetailTransaksi() {
                   Tanggal Pembelian
                 </h1>
                 <p>
-                  {moment(datas?.created_at).format("DD MMMM YYYY h:mm:ss")}
+                  {moment(datas?.created_at).format(
+                    "DD MMMM YYYY h:mm:ss"
+                  )}
                 </p>
               </div>
               <br />
-              <h1 className="underline font-bold text-lg">Detail Produk</h1>
+              <h1 className="underline font-bold text-lg">
+                Detail Produk
+              </h1>
 
-              {cart.map((item) => {
+              {cart.map((item, index) => {
                 return (
                   <>
                     <div className="rounded-xl border mt-10 p-5  shadow-lg font-medium text-lg w-full">
@@ -129,14 +142,19 @@ function DetailTransaksi() {
                           className="w-1/5 rounded-lg"
                         />
                         <div className="flex flex-col font-bold">
-                          <p className="pl-3">{item.product_name}</p>
+                          <p className="pl-3">
+                            {item.product_name}
+                          </p>
                           <div className="flex justify-between gap-[34rem] border-b-2 border-gray-200">
                             <p className="p-3">Jumlah Beli</p>
                             <p>
                               {item.qty} x Rp.{" "}
                               {item.price
                                 .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                                .replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  "."
+                                )}
                             </p>
                           </div>
                           <p className="self-end pt-3">
@@ -144,7 +162,10 @@ function DetailTransaksi() {
                             {item.price *
                               item.qty
                                 .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                                .replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  "."
+                                )}
                           </p>
                         </div>
                       </div>
@@ -157,11 +178,15 @@ function DetailTransaksi() {
                 Rincian Pembayaran
               </h1>
               <div className="flex justify-between border-b-2 border-gray-200 pt-6">
-                <h1 className=" font-bold text-lg">Metode Pembayaran</h1>
+                <h1 className=" font-bold text-lg">
+                  Metode Pembayaran
+                </h1>
                 <p>Tunai</p>
               </div>
               <div className="flex justify-between pt-6 ">
-                <h1 className=" font-bold text-lg">Total Harga(2 Barang)</h1>
+                <h1 className=" font-bold text-lg">
+                  Total Harga
+                </h1>
                 <p>Rp.{summary + discount},-</p>
               </div>
               <div className="flex justify-between border-b-2 border-gray-200 pt-3 ">
@@ -169,7 +194,9 @@ function DetailTransaksi() {
                 <p>Rp.{discount}, -</p>
               </div>
               <div className="flex justify-between pt-10 ">
-                <h1 className=" font-bold text-2xl">Total Harga(4 Barang)</h1>
+                <h1 className=" font-bold text-2xl">
+                  Total Harga
+                </h1>
                 <p>Rp.{summary},-</p>
               </div>
               <br />
