@@ -18,7 +18,7 @@ const MySwal = withReactContent(Swal);
 const EditProduk = () => {
   const navigate = useNavigate();
   const [cookie, removeCookie] = useCookies(["token"]);
-
+  const { product_id } = useParams();
   const checkToken = cookie.token;
   const [data, setData] = useState<productData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,7 +45,7 @@ const EditProduk = () => {
           headers: {
             Authorization: `Bearer ${checkToken}`,
           },
-         
+
         }
       )
       .then((res) => {
